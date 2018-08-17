@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'cards.apps.CardsConfig',
+    'rank.apps.RankConfig',
     'crispy_forms',
     'xadmin',
     'DjangoUeditor',

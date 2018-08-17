@@ -25,7 +25,7 @@ class CardsViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = CardsPagination
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    # filter_class = CardsFilter
-    filter_fields = ('cname', 'series', 'mode', 'faction', 'rarity', 'mana')
+    filter_class = CardsFilter
+    # filter_fields = ('cname', 'series', 'mode', 'faction', 'rarity', 'mana')
     search_fields = ('cname', 'faction', 'clazz', 'race', 'rarity', 'rule', 'series', 'mode')
     ordering_fields = ('mana', )

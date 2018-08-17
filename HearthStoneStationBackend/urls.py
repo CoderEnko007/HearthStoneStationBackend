@@ -22,9 +22,11 @@ from rest_framework.routers import DefaultRouter
 import xadmin
 from HearthStoneStationBackend.settings import MEDIA_ROOT
 from cards.views import CardsViewSet
+from rank.views import HSRankingViewSet
 
 router = DefaultRouter()
 router.register(r'cards', CardsViewSet, base_name='cards')
+router.register(r'rank', HSRankingViewSet, base_name='rank')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
