@@ -28,7 +28,7 @@ SECRET_KEY = '97y$&h-pe69&ujp8f(kaeuvz(gtx*c-)+0htiw3yr4#12qrev6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'cards.apps.CardsConfig',
     'rank.apps.RankConfig',
+    'decks.apps.DecksConfig',
+    'winrate.apps.WinrateConfig',
     'crispy_forms',
     'xadmin',
     'DjangoUeditor',
@@ -92,11 +94,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hearthstonestation',
         'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        # 'PASSWORD': '',
+        # 'HOST': '127.0.0.1',
+        'PASSWORD': '666666',
+        'HOST': '47.98.187.217',
         # storage_engine: myisam(default) innodb
         # set to innodb for third login
-        'OPTION': { 'init_command': 'SET storage_engine=INNODB;' }
+        'OPTION': {
+            'init_command': "SET storage_engine=INNODB;",
+        }
     }
 }
 

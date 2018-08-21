@@ -1,4 +1,3 @@
-from datetime import datetime
 from rest_framework import serializers
 from .models import HSRanking
 from utils.globalVar import globalFunc

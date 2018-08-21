@@ -5,7 +5,7 @@ from .models import Cards, Series
 class CardsAdmin(object):
     list_display = ["cname", "ename", "description", "faction", "clazz", \
                    "race", "rarity", "rule", "series", "mode"]
-    list_filter = ["mana", "hp", "cname", "faction", "clazz", "race", "series", "mode"]
+    list_filter = ["mana", "hp", "cname", "faction", "clazz", "race", "rarity", "series", "mode"]
     search_fields = ['cname', 'ename']
     readonly_fields = ('image_img','image_thumb')
     exclude = ['img', 'thumbnail']  # 排除该字段
