@@ -25,12 +25,14 @@ from cards.views import CardsViewSet
 from rank.views import HSRankingViewSet
 from winrate.views import HSWinRateViewSet
 from decks.views import DecksViewSet
+from archetype.views import ArchetypeSet
 
 router = DefaultRouter()
 router.register(r'cards', CardsViewSet, base_name='cards')
 router.register(r'rank', HSRankingViewSet, base_name='rank')
 router.register(r'winrate', HSWinRateViewSet, base_name='winrate')
 router.register(r'decks', DecksViewSet, base_name='decks')
+router.register(r'archetype', ArchetypeSet, base_name='archetype')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

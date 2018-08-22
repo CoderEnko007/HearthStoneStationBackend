@@ -45,11 +45,11 @@ INSTALLED_APPS = [
     'rank.apps.RankConfig',
     'decks.apps.DecksConfig',
     'winrate.apps.WinrateConfig',
+    'archetype.apps.ArchetypeConfig',
     'crispy_forms',
     'xadmin',
     'DjangoUeditor',
     'django_admin_listfilter_dropdown',
-    # 'rangefilter',
     'rest_framework',
     'django_filters',
 ]
