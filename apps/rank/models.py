@@ -6,7 +6,7 @@ from utils.globalVar import globalVariable
 class HSRanking(models.Model):
     mode = models.CharField(max_length=20, choices=globalVariable.MODE_TYPE, null=True, blank=True, verbose_name='游戏模式')
     rank_no = models.IntegerField(null=True, blank=True, verbose_name='排名')
-    name = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True, verbose_name='职业')
+    name = models.CharField(max_length=100, choices=globalVariable.FACTION_TYPE, null=True, blank=True, verbose_name='职业')
     winrate = models.CharField(max_length=20, null=True, blank=True, verbose_name='胜率')
     report_time = models.DateTimeField(null=True, blank=True, default=datetime.now, verbose_name='日期')
 

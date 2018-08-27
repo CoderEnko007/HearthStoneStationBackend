@@ -6,10 +6,10 @@ from datetime import datetime
 class Archetype(models.Model):
     tier = models.CharField(max_length=20, null=True, blank=True, verbose_name='梯队')
     faction = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True, verbose_name='职业')
-    archetype_name = models.CharField(max_length=20, null=True, blank=True, verbose_name='牌组名称')
-    win_rate = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True, verbose_name='胜率')  # 胜率
+    archetype_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='牌组名称')
+    win_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='胜率')  # 胜率
     game_count = models.IntegerField(null=True, blank=True, verbose_name='总对局数')  # 总对局数
-    popularity = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True, verbose_name='热度')  # 胜率
+    popularity = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='热度')  # 胜率
     best_matchup = models.TextField(default='', null=True, blank=True, verbose_name='最优对局')
     worst_matchup = models.TextField(default='', null=True, blank=True, verbose_name='最劣对局')
     core_cards =  models.TextField(default='', null=True, blank=True, verbose_name='核心卡牌')

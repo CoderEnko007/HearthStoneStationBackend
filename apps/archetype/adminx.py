@@ -6,6 +6,7 @@ class ArchetypeAdmin(object):
     list_filter = ['tier', 'faction', 'update_time']
     search_fields = ['archetype_name', ]
     ordering = ('tier', )
+    list_per_page = 10
 
 xadmin.site.register(Archetype, ArchetypeAdmin)
 

@@ -10,7 +10,7 @@ class CardsAdmin(object):
     readonly_fields = ('image_img','image_thumb')
     exclude = ['img', 'thumbnail']  # 排除该字段
     ordering = ('mana',)
-    list_per_page = 30
+    list_per_page = 10
 
 class SeriesAdmin(object):
     list_display = ["cname", "ename", "create_time"]
