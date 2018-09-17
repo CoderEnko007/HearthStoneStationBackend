@@ -1,5 +1,5 @@
 import xadmin
-from .models import Cards, Series
+from .models import Cards, Series, HSCards
 
 
 class CardsAdmin(object):
@@ -12,8 +12,20 @@ class CardsAdmin(object):
     ordering = ('mana',)
     list_per_page = 10
 
+class HSCardsAdmin(object):
+    list_display = ['hsId', 'name', 'ename', 'cardClass', 'rarity', 'type', 'race', 'text', 'set', 'artist']
+    list_filter = ['cost', 'health', 'cardClass', 'rarity', 'type', 'race', 'set', 'artist']
+    search_fields = ['name', 'ename']
+    readonly_fields = ('image_img', 'image_thumb')
+    ordering = ('cost',)
+    list_per_page = 10
+
 class SeriesAdmin(object):
-    list_display = ["cname", "ename", "create_time"]
+    list_display = ["cname", "ename", "mode", "create_time"]
+    list_filter = ["mode", ]
+    list_editable = ["mode", ]
+
 
 xadmin.site.register(Series, SeriesAdmin)
-xadmin.site.register(Cards, CardsAdmin)
+# xadmin.site.register(Cards, CardsAdmin)
+xadmin.site.register(HSCards, HSCardsAdmin)

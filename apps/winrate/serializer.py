@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HSWinRate
+from .models import HSWinRate, DeckNameTranslate
 from utils.globalVar import globalFunc
 
 class HSWinRateSerializer(serializers.ModelSerializer):
@@ -17,4 +17,10 @@ class HSWinRateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HSWinRate
+        fields = "__all__"
+
+
+class DeckNameTranslateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeckNameTranslate
         fields = "__all__"

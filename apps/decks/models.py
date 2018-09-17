@@ -18,6 +18,7 @@ class Decks(models.Model):
     background_img = models.CharField(max_length=200, null=True, blank=True, verbose_name='背景图')  # 背景图
 
     card_list = models.TextField(default='', null=True, blank=True, verbose_name='卡组套牌')
+    deck_code = models.TextField(default='', null=True, blank=True, verbose_name='卡组代码')
     clazzCount = models.TextField(default='', null=True, blank=True, verbose_name='类别组成')
     rarityCount = models.TextField(default='', null=True, blank=True, verbose_name='稀有统计')
     statistic = models.TextField(default='', null=True, blank=True, verbose_name='费用统计')

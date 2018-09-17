@@ -15,4 +15,4 @@ class DecksFilter(filters.FilterSet):
 
     class Meta:
         model = Decks
-        fields = ['faction', 'deck_name', 'create_time']
+        fields = ['faction', 'deck_id', 'deck_name', 'create_time']
