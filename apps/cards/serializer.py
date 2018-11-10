@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cards, Series, HSCards
+from .models import Cards, Series, HSCards, ArenaCards
 from utils.globalVar import globalFunc
 
 
@@ -37,4 +37,9 @@ class CardsSerializer(serializers.ModelSerializer):
 class HSCardsSerializer(serializers.ModelSerializer):
     class Meta:
         model = HSCards
+        fields = "__all__"
+
+class ArenaCardsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArenaCards
         fields = "__all__"

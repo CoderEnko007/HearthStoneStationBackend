@@ -12,7 +12,7 @@ django.setup()
 
 from cards.models import HSCards, Series
 
-f = open('cards_collectible.json', encoding='utf-8')
+f = open('cards.collectible.json', encoding='utf-8')
 data = json.load(f)
 for item in data:
     card = HSCards()

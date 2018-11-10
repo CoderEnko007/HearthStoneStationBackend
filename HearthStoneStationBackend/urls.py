@@ -24,7 +24,7 @@ from HearthStoneStationBackend.settings import MEDIA_ROOT
 from cards.views import CardsViewSet, HSCardsViewSet
 from rank.views import HSRankingViewSet
 from winrate.views import HSWinRateViewSet, DeckNameTranslateViewSet
-from decks.views import DecksViewSet
+from decks.views import DecksViewSet, TrendingViewSet
 from archetype.views import ArchetypeSet
 
 router = DefaultRouter()
@@ -32,6 +32,7 @@ router = DefaultRouter()
 router.register(r'rank', HSRankingViewSet, base_name='rank')
 router.register(r'winrate', HSWinRateViewSet, base_name='winrate')
 router.register(r'decks', DecksViewSet, base_name='decks')
+router.register(r'trending', TrendingViewSet, base_name='trending')
 router.register(r'cards', HSCardsViewSet, base_name='cards')
 router.register(r'archetype', ArchetypeSet, base_name='archetype')
 router.register(r'deckname', DeckNameTranslateViewSet, base_name='deckname')

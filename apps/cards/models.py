@@ -106,3 +106,58 @@ class HSCards(models.Model):
 
     def __str__(self):
         return self.name
+
+class ArenaCards(models.Model):
+    hsId = models.CharField(max_length=20, null=True, blank=True, verbose_name='hsId')
+    dbfId = models.IntegerField(verbose_name='DBF IDs')
+    name = models.CharField(max_length=100, verbose_name='名称')
+    ename = models.CharField(max_length=100, null=True, blank=True, verbose_name='英文名')
+    cost = models.IntegerField(null=True, blank=True, verbose_name='费用')
+    attack = models.IntegerField(null=True, blank=True, verbose_name='攻击')
+    health = models.IntegerField(null=True, blank=True, verbose_name='血量')
+    cardClass = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True,
+                                 verbose_name='职业')
+    race = models.CharField(max_length=20, null=True, blank=True, verbose_name='种族')
+    rarity = models.CharField(max_length=20, choices=globalVariable.RARITY_TYPE, verbose_name='稀有度')
+    set = models.ForeignKey(Series, related_name='ArenaCards', null=True, blank=True, verbose_name='扩展包系列',
+                            on_delete=models.SET_NULL)
+    type = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.CLAZZ_TYPE,
+                            verbose_name='卡牌类别')
+    mechanics = models.TextField(null=True, blank=True, verbose_name='卡牌机制')
+    flavor = models.TextField(null=True, blank=True, verbose_name='描述')
+    text = models.TextField(null=True, blank=True, verbose_name='效果')
+    artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
+    collectible = models.BooleanField(verbose_name='可收集')
+
+    classification = models.CharField(max_length=20, verbose_name='职业分类')
+    times_played = models.IntegerField(null=True, blank=True, verbose_name='打出次数')
+    played_pop = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='打出卡牌中占比')
+    played_winrate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='打出胜率')
+    deck_pop = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='套牌中出现概率')
+    deck_winrate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='卡组胜率')
+    copies = models.IntegerField(null=True, blank=True, verbose_name='张数')
+
+    update_time = models.DateTimeField(default=datetime.now, verbose_name='更新时间')
+
+    def image_img(self):
+        if self.hsId:
+            str = "<img src='https://art.hearthstonejson.com/v1/256x/{}.jpg'/>".format(self.hsId)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+    image_img.short_description = '图片'
+
+    def image_thumb(self):
+        if self.hsId:
+            str = "<img src='https://art.hearthstonejson.com/v1/tiles/{}.jpg'/>".format(self.hsId)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+    image_thumb.short_description = '缩略图'
+
+    class Meta:
+        verbose_name = '竞技场单卡数据'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name

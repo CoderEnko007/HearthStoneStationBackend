@@ -1,5 +1,5 @@
 import xadmin
-from .models import Cards, Series, HSCards
+from .models import Cards, Series, HSCards, ArenaCards
 
 
 class CardsAdmin(object):
@@ -14,10 +14,18 @@ class CardsAdmin(object):
 
 class HSCardsAdmin(object):
     list_display = ['hsId', 'name', 'ename', 'cardClass', 'rarity', 'type', 'race', 'text', 'set', 'artist']
-    list_filter = ['cost', 'health', 'cardClass', 'rarity', 'type', 'race', 'set', 'artist']
+    list_filter = ['dbfId', 'cost', 'health', 'cardClass', 'rarity', 'type', 'race', 'set', 'artist']
     search_fields = ['name', 'ename']
     readonly_fields = ('image_img', 'image_thumb')
     ordering = ('cost',)
+    list_per_page = 10
+
+class ArenaCardsAdmin(object):
+    list_display = ['hsId', 'name', 'cardClass', 'classification', 'times_played', 'deck_pop', 'deck_winrate', 'played_winrate', 'update_time']
+    list_filter = ['classification', 'dbfId', 'cost', 'health', 'cardClass', 'rarity', 'type', 'race', 'set', 'artist', 'update_time']
+    search_fields = ['name', 'ename', 'dbfId']
+    readonly_fields = ('image_img', 'image_thumb')
+    ordering = ('cost', 'update_time')
     list_per_page = 10
 
 class SeriesAdmin(object):
@@ -29,3 +37,4 @@ class SeriesAdmin(object):
 xadmin.site.register(Series, SeriesAdmin)
 # xadmin.site.register(Cards, CardsAdmin)
 xadmin.site.register(HSCards, HSCardsAdmin)
+xadmin.site.register(ArenaCards, ArenaCardsAdmin)

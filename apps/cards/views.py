@@ -1,12 +1,12 @@
 from django.shortcuts import render
 
-from .serializer import CardsSerializer, HSCardsSerializer
+from .serializer import CardsSerializer, HSCardsSerializer, ArenaCardsSerializer
 from rest_framework import viewsets, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Cards, HSCards
+from .models import Cards, HSCards, ArenaCards
 from .filters import CardsFilter, HSCardsFilter
 
 # Create your views here.
@@ -66,3 +66,14 @@ class HSCardsViewSet(viewsets.ReadOnlyModelViewSet):
             if value is None:
                 del serializer_data[key]
         return Response(serializer_data)
+
+class ArenaCardsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ArenaCards.objects.all().order_by('dbfId')
+    serializer_class = ArenaCardsSerializer
+    pagination_class = CardsPagination
+
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = HSCardsFilter
+    # filter_fields = ('cname', 'series', 'mode', 'faction', 'rarity', 'mana')
+    search_fields = ('cname', 'faction', 'clazz', 'race', 'rarity', 'rule', 'series', 'mode')
+    ordering_fields = ('mana',)

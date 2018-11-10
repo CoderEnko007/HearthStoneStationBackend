@@ -12,6 +12,8 @@ class Archetype(models.Model):
     popularity = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='热度')  # 胜率
     best_matchup = models.TextField(default='', null=True, blank=True, verbose_name='最优对局')
     worst_matchup = models.TextField(default='', null=True, blank=True, verbose_name='最劣对局')
+    pop_deck = models.TextField(default='', null=True, blank=True, verbose_name='最受欢迎卡组')
+    best_deck = models.TextField(default='', null=True, blank=True, verbose_name='最优异卡组')
     core_cards =  models.TextField(default='', null=True, blank=True, verbose_name='核心卡牌')
     pop_cards = models.TextField(default='', null=True, blank=True, verbose_name='热门卡牌')
     matchup = models.TextField(default='', null=True, blank=True, verbose_name='对抗情况')
