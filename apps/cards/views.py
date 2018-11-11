@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Cards, HSCards, ArenaCards
-from .filters import CardsFilter, HSCardsFilter
+from .filters import CardsFilter, HSCardsFilter, HSArenaCardsFilter
 
 # Create your views here.
 class CardsPagination(PageNumberPagination):
@@ -73,7 +73,7 @@ class ArenaCardsViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = CardsPagination
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_class = HSCardsFilter
+    filter_class = HSArenaCardsFilter
     # filter_fields = ('cname', 'series', 'mode', 'faction', 'rarity', 'mana')
     search_fields = ('cname', 'faction', 'clazz', 'race', 'rarity', 'rule', 'series', 'mode')
-    ordering_fields = ('mana',)
+    ordering_fields = ('mana', 'times_played', 'deck_pop')

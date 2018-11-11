@@ -11,6 +11,18 @@ class globalVariable(object):
         ('Warrior', '战士'),
         ('Neutral', '中立')
     )
+    ARENA_FACTION_TYPE = (
+        ('ALL', '全部'),
+        ('DRUID', '德鲁伊'),
+        ('HUNTER', '猎人'),
+        ('MAGE', '法师'),
+        ('PALADIN', '圣骑士'),
+        ('PRIEST', '牧师'),
+        ('ROGUE', '潜行者'),
+        ('SHAMAN', '萨满'),
+        ('WARLOCK', '术士'),
+        ('WARRIOR', '战士')
+    )
     RARITY_TYPE = (
         ('FREE', '免费'),
         ('COMMON', '普通'),

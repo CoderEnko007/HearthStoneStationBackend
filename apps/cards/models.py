@@ -129,7 +129,7 @@ class ArenaCards(models.Model):
     artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
     collectible = models.BooleanField(verbose_name='可收集')
 
-    classification = models.CharField(max_length=20, verbose_name='职业分类')
+    classification = models.CharField(max_length=20, choices=globalVariable.ARENA_FACTION_TYPE, verbose_name='职业分类')
     times_played = models.IntegerField(null=True, blank=True, verbose_name='打出次数')
     played_pop = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='打出卡牌中占比')
     played_winrate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='打出胜率')
