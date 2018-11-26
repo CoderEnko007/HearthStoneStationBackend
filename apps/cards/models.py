@@ -84,6 +84,16 @@ class HSCards(models.Model):
     artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
     collectible = models.BooleanField(verbose_name='可收集')
 
+    audio_play_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='入场音效（英）')
+    audio_attack_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='攻击音效（英）')
+    audio_death_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='阵亡音效（英）')
+    audio_trigger_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='效果触发音效（英）')
+    audio_play_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='入场音效（中）')
+    audio_attack_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='攻击音效（中）')
+    audio_death_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='阵亡音效（中）')
+    audio_trigger_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='效果触发音效（中）')
+
+
     def image_img(self):
         if self.hsId:
             str = "<img src='https://art.hearthstonejson.com/v1/256x/{}.jpg'/>".format(self.hsId)
@@ -136,6 +146,16 @@ class ArenaCards(models.Model):
     deck_pop = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='套牌中出现概率')
     deck_winrate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='卡组胜率')
     copies = models.IntegerField(null=True, blank=True, verbose_name='张数')
+    # class_all = models.TextField(null=True, blank=True, verbose_name='全部职业')
+    # class_druid = models.TextField(null=True, blank=True, verbose_name='德鲁伊')
+    # class_hunter = models.TextField(null=True, blank=True, verbose_name='猎人')
+    # class_mage = models.TextField(null=True, blank=True, verbose_name='法师')
+    # class_paladin = models.TextField(null=True, blank=True, verbose_name='圣骑士')
+    # class_priest = models.TextField(null=True, blank=True, verbose_name='牧师')
+    # class_rogue = models.TextField(null=True, blank=True, verbose_name='潜行者')
+    # class_shaman = models.TextField(null=True, blank=True, verbose_name='萨满')
+    # class_warlock = models.TextField(null=True, blank=True, verbose_name='术士')
+    # class_warrior = models.TextField(null=True, blank=True, verbose_name='战士')
 
     update_time = models.DateTimeField(default=datetime.now, verbose_name='更新时间')
 
