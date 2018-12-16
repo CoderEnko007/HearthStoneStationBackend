@@ -80,18 +80,19 @@ class HSCards(models.Model):
     type = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.CLAZZ_TYPE, verbose_name='卡牌类别')
     mechanics = models.TextField(null=True, blank=True, verbose_name='卡牌机制')
     flavor = models.TextField(null=True, blank=True, verbose_name='描述')
+    eflavor = models.TextField(null=True, blank=True, verbose_name='英文描述')
     text = models.TextField(null=True, blank=True, verbose_name='效果')
     artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
     collectible = models.BooleanField(verbose_name='可收集')
 
-    audio_play_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='入场音效（英）')
-    audio_attack_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='攻击音效（英）')
-    audio_death_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='阵亡音效（英）')
-    audio_trigger_en = models.CharField(max_length=500, null=True, blank=True, verbose_name='效果触发音效（英）')
-    audio_play_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='入场音效（中）')
-    audio_attack_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='攻击音效（中）')
-    audio_death_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='阵亡音效（中）')
-    audio_trigger_zh = models.CharField(max_length=500, null=True, blank=True, verbose_name='效果触发音效（中）')
+    audio_play_en = models.TextField(null=True, blank=True, verbose_name='入场音效（英）')
+    audio_attack_en = models.TextField(null=True, blank=True, verbose_name='攻击音效（英）')
+    audio_death_en = models.TextField(null=True, blank=True, verbose_name='阵亡音效（英）')
+    audio_trigger_en = models.TextField(null=True, blank=True, verbose_name='效果触发音效（英）')
+    audio_play_zh = models.TextField(null=True, blank=True, verbose_name='入场音效（中）')
+    audio_attack_zh = models.TextField(null=True, blank=True, verbose_name='攻击音效（中）')
+    audio_death_zh = models.TextField(null=True, blank=True, verbose_name='阵亡音效（中）')
+    audio_trigger_zh = models.TextField(null=True, blank=True, verbose_name='效果触发音效（中）')
 
 
     def image_img(self):
@@ -118,6 +119,7 @@ class HSCards(models.Model):
         return self.name
 
 class ArenaCards(models.Model):
+    ifanId = models.CharField(max_length=200, null=True, blank=True, verbose_name='ifanId')
     hsId = models.CharField(max_length=20, null=True, blank=True, verbose_name='hsId')
     dbfId = models.IntegerField(verbose_name='DBF IDs')
     name = models.CharField(max_length=100, verbose_name='名称')
@@ -139,7 +141,7 @@ class ArenaCards(models.Model):
     artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
     collectible = models.BooleanField(verbose_name='可收集')
 
-    classification = models.CharField(max_length=20, choices=globalVariable.ARENA_FACTION_TYPE, verbose_name='职业分类')
+    classification = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.ARENA_FACTION_TYPE, verbose_name='职业分类')
     times_played = models.IntegerField(null=True, blank=True, verbose_name='打出次数')
     played_pop = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='打出卡牌中占比')
     played_winrate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='打出胜率')

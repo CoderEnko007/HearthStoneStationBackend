@@ -39,11 +39,12 @@ for item in data:
     card.save()
     print('save:', item.get('name'))
 
-f = open('cards_collectible_enUS.json', encoding='utf-8')
+f = open('cards.collectible_enUS.json', encoding='utf-8')
 data = json.load(f)
 for item in data:
     card = HSCards.objects.filter(hsId=item['id'])[0]
     card.ename = item['name']
+    card.eflavor = item.get('flavor')
     card.save()
     print('update:', item.get('name'))
 

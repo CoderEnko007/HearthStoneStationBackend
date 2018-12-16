@@ -22,7 +22,7 @@ class HSCardsAdmin(object):
 
 class ArenaCardsAdmin(object):
     list_display = ['hsId', 'name', 'cardClass', 'classification', 'times_played', 'deck_pop', 'deck_winrate', 'played_winrate', 'update_time']
-    list_filter = ['classification', 'dbfId', 'cost', 'health', 'cardClass', 'rarity', 'type', 'race', 'set', 'artist', 'times_played', 'update_time']
+    list_filter = ['ifanId', 'classification', 'dbfId', 'cost', 'health', 'cardClass', 'rarity', 'type', 'race', 'set', 'artist', 'times_played', 'update_time']
     search_fields = ['name', 'ename', 'dbfId']
     readonly_fields = ('image_img', 'image_thumb')
     ordering = ('cost', 'update_time')
