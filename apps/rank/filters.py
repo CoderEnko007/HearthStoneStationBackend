@@ -7,7 +7,6 @@ from .models import HSRanking
 
 class RankFilter(filters.FilterSet):
     report_time = filters.DateTimeFilter(method='report_time_filter')
-    rank_no = filters.NumberFilter(min_value=1, max_value=9)
 
     def report_time_filter(self, queryset, name, value):
         start_date = value
@@ -16,4 +15,4 @@ class RankFilter(filters.FilterSet):
 
     class Meta:
         model = HSRanking
-        fields = ['mode', 'name', 'rank_no', 'report_time']
+        fields = ['game_type', 'faction', 'report_time']

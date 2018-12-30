@@ -3,7 +3,7 @@ from .models import HSWinRate, DeckNameTranslate
 
 class HSWinRateAdmin(object):
     list_display = ['faction', 'archetype', 'winrate', 'popularity', 'games', 'create_time']
-    list_filter = ['faction', 'winrate', 'popularity', 'games', 'create_time']
+    list_filter = ['faction', 'archetype', 'winrate', 'popularity', 'games', 'create_time']
     search_fields = ['faction', 'archetype']
     list_per_page = 15
 

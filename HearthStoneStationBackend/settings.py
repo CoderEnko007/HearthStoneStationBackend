@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'decks.apps.DecksConfig',
     'winrate.apps.WinrateConfig',
     'archetype.apps.ArchetypeConfig',
+    'wechat.apps.WechatConfig',
     'crispy_forms',
     'xadmin',
     'DjangoUeditor',

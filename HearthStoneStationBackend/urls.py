@@ -26,6 +26,10 @@ from rank.views import HSRankingViewSet
 from winrate.views import HSWinRateViewSet, DeckNameTranslateViewSet
 from decks.views import DecksViewSet, TrendingViewSet
 from archetype.views import ArchetypeSet
+from wechat.views import WeChat
+
+from werobot.contrib.django import make_view
+from wechat.robot import robot
 
 router = DefaultRouter()
 # router.register(r'cards', CardsViewSet, base_name='cards')
@@ -45,6 +49,10 @@ urlpatterns = [
     path('media/<path:path>/', serve, {'document_root': MEDIA_ROOT}),
     path('api-auth/', include('rest_framework.urls')),
     path('docs/', include_docs_urls(title='炉石传说情报站管理系统')),
+
+    path('wechat', WeChat.as_view()),
+    path('robot', make_view(robot)),
+    # path('wechat/', include('wechat.urls')),
 
     path('', include(router.urls)),
 ]
