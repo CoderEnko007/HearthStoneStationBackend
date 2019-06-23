@@ -26,4 +26,4 @@ class ArchetypeFilter(filters.FilterSet):
     #         frame = frame.f_back
     class Meta:
         model = Archetype
-        fields = ['faction', 'tier', 'update_time']
+        fields = ['faction', 'tier', 'rank_range', 'update_time']

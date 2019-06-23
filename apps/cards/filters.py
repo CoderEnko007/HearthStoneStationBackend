@@ -28,4 +28,4 @@ class HSArenaCardsFilter(filters.FilterSet):
 
     class Meta:
         model = ArenaCards
-        fields = ['name', 'cardClass', 'rarity', 'type', 'set', 'classification', 'min_cost', 'min_played']
+        fields = ['name', 'cardClass', 'rarity', 'type', 'set', 'classification', 'min_cost', 'min_played', 'extra_data', 'update_time']

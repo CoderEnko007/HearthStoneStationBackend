@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.utils.html import mark_safe
 from datetime import datetime
@@ -66,10 +67,28 @@ class Cards(models.Model):
 
 
 class HSCards(models.Model):
+    def image_img(self):
+        if self.hsId:
+            str = "<img src='https://art.hearthstonejson.com/v1/render/latest/zhCN/256x/{}.png'/>".format(self.hsId)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+    image_img.short_description = '图片'
+
+    def image_thumb(self):
+        if self.hsId:
+            str = "<img src='https://art.hearthstonejson.com/v1/tiles/{}.jpg'/>".format(self.hsId)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+
+    image_thumb.short_description = '缩略图'
+
     hsId = models.CharField(max_length=20, null=True, blank=True, verbose_name='hsId')
     dbfId = models.IntegerField(verbose_name='DBF IDs')
     name = models.CharField(max_length=100, verbose_name='名称')
     ename = models.CharField(max_length=100, null=True, blank=True, verbose_name='英文名')
+    entourage = models.TextField(null=True, blank=True, verbose_name='衍生卡')
     cost = models.IntegerField(null=True, blank=True, verbose_name='费用')
     attack = models.IntegerField(null=True, blank=True, verbose_name='攻击')
     health = models.IntegerField(null=True, blank=True, verbose_name='血量')
@@ -84,6 +103,7 @@ class HSCards(models.Model):
     text = models.TextField(null=True, blank=True, verbose_name='效果')
     artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
     collectible = models.BooleanField(verbose_name='可收集')
+    invalid = models.BooleanField(default=False, verbose_name='无效卡')
 
     audio_play_en = models.TextField(null=True, blank=True, verbose_name='入场音效（英）')
     audio_attack_en = models.TextField(null=True, blank=True, verbose_name='攻击音效（英）')
@@ -94,22 +114,15 @@ class HSCards(models.Model):
     audio_death_zh = models.TextField(null=True, blank=True, verbose_name='阵亡音效（中）')
     audio_trigger_zh = models.TextField(null=True, blank=True, verbose_name='效果触发音效（中）')
 
+    img_tile_link = models.TextField(null=True, blank=True, verbose_name='tile图片地址')
+    img_card_link = models.TextField(null=True, blank=True, verbose_name='card图片地址')
+    create_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
 
-    def image_img(self):
-        if self.hsId:
-            str = "<img src='https://art.hearthstonejson.com/v1/256x/{}.jpg'/>".format(self.hsId)
-            return mark_safe(str)
-        else:
-            return '(no image)'
-    image_img.short_description = '图片'
+    def set_entourage(self, item):
+        self.entourage = json.dumps(item)
 
-    def image_thumb(self):
-        if self.hsId:
-            str = "<img src='https://art.hearthstonejson.com/v1/tiles/{}.jpg'/>".format(self.hsId)
-            return mark_safe(str)
-        else:
-            return '(no image)'
-    image_thumb.short_description = '缩略图'
+    def get_entourage(self):
+        return json.loads(self.entourage)
 
     class Meta:
         verbose_name = '卡牌详情'
@@ -130,7 +143,7 @@ class ArenaCards(models.Model):
     cardClass = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True,
                                  verbose_name='职业')
     race = models.CharField(max_length=20, null=True, blank=True, verbose_name='种族')
-    rarity = models.CharField(max_length=20, choices=globalVariable.RARITY_TYPE, verbose_name='稀有度')
+    rarity = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.RARITY_TYPE, verbose_name='稀有度')
     set = models.ForeignKey(Series, related_name='ArenaCards', null=True, blank=True, verbose_name='扩展包系列',
                             on_delete=models.SET_NULL)
     type = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.CLAZZ_TYPE,
@@ -148,6 +161,7 @@ class ArenaCards(models.Model):
     deck_pop = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='套牌中出现概率')
     deck_winrate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, verbose_name='卡组胜率')
     copies = models.IntegerField(null=True, blank=True, verbose_name='张数')
+
     # class_all = models.TextField(null=True, blank=True, verbose_name='全部职业')
     # class_druid = models.TextField(null=True, blank=True, verbose_name='德鲁伊')
     # class_hunter = models.TextField(null=True, blank=True, verbose_name='猎人')
@@ -158,8 +172,12 @@ class ArenaCards(models.Model):
     # class_shaman = models.TextField(null=True, blank=True, verbose_name='萨满')
     # class_warlock = models.TextField(null=True, blank=True, verbose_name='术士')
     # class_warrior = models.TextField(null=True, blank=True, verbose_name='战士')
-
+    extra_data = models.NullBooleanField(null=True, blank=True, verbose_name='统计用数据')
+    deck_pop_mean = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True, verbose_name='出现率均值')
+    deck_pop_stdev = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True, verbose_name='出现率标准差')
     update_time = models.DateTimeField(default=datetime.now, verbose_name='更新时间')
+
+    img_tile_link = models.TextField(null=True, blank=True, verbose_name='tile图片地址')
 
     def image_img(self):
         if self.hsId:

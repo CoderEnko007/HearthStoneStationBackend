@@ -2,9 +2,10 @@ import xadmin
 from .models import HSWinRate, DeckNameTranslate
 
 class HSWinRateAdmin(object):
-    list_display = ['faction', 'archetype', 'winrate', 'popularity', 'games', 'create_time']
-    list_filter = ['faction', 'archetype', 'winrate', 'popularity', 'games', 'create_time']
+    list_display = ['faction', 'archetype', 'winrate', 'popularity', 'games', 'rank_range', 'create_time']
+    list_filter = ['faction', 'archetype', 'winrate', 'popularity', 'games', 'rank_range', 'create_time']
     search_fields = ['faction', 'archetype']
+    ordering = ('-create_time',)
     list_per_page = 15
 
 class DeckNameTranslateAdmin(object):

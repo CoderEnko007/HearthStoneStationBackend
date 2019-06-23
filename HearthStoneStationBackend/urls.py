@@ -34,12 +34,15 @@ from wechat.robot import robot
 router = DefaultRouter()
 # router.register(r'cards', CardsViewSet, base_name='cards')
 router.register(r'rank', HSRankingViewSet, base_name='rank')
+router.register(r'rank-vis', HSRankingViewSet, base_name='rank-vis')
 router.register(r'winrate', HSWinRateViewSet, base_name='winrate')
+router.register(r'winrate-vis', HSWinRateViewSet, base_name='winrate-vis')
 router.register(r'decks', DecksViewSet, base_name='decks')
 router.register(r'trending', TrendingViewSet, base_name='trending')
 router.register(r'cards', HSCardsViewSet, base_name='cards')
 router.register(r'arenaCards', ArenaCardsViewSet, base_name='arenaCards')
 router.register(r'archetype', ArchetypeSet, base_name='archetype')
+router.register(r'archetype-vis', ArchetypeSet, base_name='archetype-vis')
 router.register(r'deckname', DeckNameTranslateViewSet, base_name='deckname')
 
 urlpatterns = [

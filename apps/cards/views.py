@@ -76,4 +76,4 @@ class ArenaCardsViewSet(viewsets.ReadOnlyModelViewSet):
     filter_class = HSArenaCardsFilter
     # filter_fields = ('cname', 'series', 'mode', 'faction', 'rarity', 'mana')
     search_fields = ('cname', 'faction', 'clazz', 'race', 'rarity', 'rule', 'series', 'mode')
-    ordering_fields = ('mana', 'times_played', 'deck_pop')
+    ordering_fields = ('mana', 'times_played', 'deck_pop', 'update_time')

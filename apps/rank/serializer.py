@@ -22,3 +22,8 @@ class HSRankingSerializer(serializers.ModelSerializer):
     class Meta:
         model = HSRanking
         fields = "__all__"
+
+class HSRankingVisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HSRanking
+        fields = "__all__"

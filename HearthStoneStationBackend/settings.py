@@ -46,13 +46,13 @@ INSTALLED_APPS = [
     'decks.apps.DecksConfig',
     'winrate.apps.WinrateConfig',
     'archetype.apps.ArchetypeConfig',
-    'wechat.apps.WechatConfig',
     'crispy_forms',
     'xadmin',
     'DjangoUeditor',
     'django_admin_listfilter_dropdown',
     'rest_framework',
     'django_filters',
+    'daterange_filter'
 ]
 
 MIDDLEWARE = [

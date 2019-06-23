@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Cards, Series, HSCards, ArenaCards
 from utils.globalVar import globalFunc
+import json
 
 
 class SeriesSerializer(serializers.ModelSerializer):
@@ -35,6 +36,11 @@ class CardsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class HSCardsSerializer(serializers.ModelSerializer):
+    entourage = serializers.SerializerMethodField()
+
+    def get_entourage(self, obj):
+        return json.loads(obj.entourage.replace('\'', '"')) if obj.entourage is not None else None
+
     class Meta:
         model = HSCards
         fields = "__all__"

@@ -3,6 +3,7 @@ import os
 import glob
 import re
 import json
+from dbtools.iFanr import iFanr
 from HearthStoneStationBackend.settings import BASE_DIR
 
 pwd = os.path.dirname(os.path.realpath(__file__))
@@ -15,8 +16,8 @@ django.setup()
 from cards.models import HSCards
 
 audioPath = os.path.join(BASE_DIR, 'media')
-audioFileEn = glob.glob(audioPath+'/sound/sounds/*.wav')
-audioFileZh = glob.glob(audioPath+'/sound/soundszhcn/*.wav')
+audioFileEn = glob.glob(audioPath+'/sound/DAL-enus/*.wav')
+audioFileZh = glob.glob(audioPath+'/sound/DAL-zhcn/*.wav')
 # print(type(audioFileEn), len(audioFileEn))
 # f = open('./audio_name.txt', 'w')
 # f.write(str(len(audioFileEn))+'\n')
@@ -26,7 +27,10 @@ audioFileZh = glob.glob(audioPath+'/sound/soundszhcn/*.wav')
 #     f.write(name+'\n')
 # f.close()
 
-queryset = HSCards.objects.all().order_by('cost')
+# queryset = HSCards.objects.all().order_by('cost')
+HSCardsTableId = 66551
+ifanr = iFanr()
+queryset = HSCards.objects.filter(set__ename='DALARAN')
 for card in queryset:
     # print(card.hsId)
     # if card.type == 'SPELL' or card.type == 'WEAPON': continue
@@ -42,7 +46,7 @@ for card in queryset:
         audio_name = audio[audio.rfind('/') + 1:]
         if ('HERO' not in card.hsId.upper()) and (card.hsId.upper() in audio_name.upper()):
             # file_name = audio[audio[:audio.rfind('/')].rfind('/'):audio.rfind('/')]
-            file_name = '/sounds'
+            file_name = '/DAL-enus'
             if re.search('.*_play[0-9_.]+.*', audio_name, re.IGNORECASE) or re.search('.*_EnterPlay[0-9_.]+.*', audio_name, re.IGNORECASE):
                 audio_play_en.append("http://47.98.187.217/media/sound{0}/{1}".format(file_name, audio_name))
             if re.search('.*_attack[0-9_.]+.*', audio_name, re.IGNORECASE):
@@ -55,7 +59,7 @@ for card in queryset:
         audio_name = audio[audio.rfind('/') + 1:]
         if ('HERO' not in card.hsId.upper()) and (card.hsId.upper() in audio_name.upper()):
             # file_name = audio[audio[:audio.rfind('/')].rfind('/'):audio.rfind('/')]
-            file_name = '/soundszhcn'
+            file_name = '/DAL-zhcn'
             if re.search('.*_play[0-9_.]+.*', audio_name, re.IGNORECASE) or re.search('.*_EnterPlay[0-9_.]+.*', audio_name, re.IGNORECASE):
                 audio_play_zh.append("http://47.98.187.217/media/sound{0}/{1}".format(file_name, audio_name))
             if re.search('.*_attack[0-9_.]+.*', audio_name, re.IGNORECASE):
@@ -64,13 +68,33 @@ for card in queryset:
                 audio_death_zh.append("http://47.98.187.217/media/sound{0}/{1}".format(file_name, audio_name))
             if re.search('.*_trigger[0-9_.]+.*', audio_name, re.IGNORECASE):
                 audio_trigger_zh.append("http://47.98.187.217/media/sound{0}/{1}".format(file_name, audio_name))
-    card.audio_play_en = json.dumps(sorted(audio_play_en), ensure_ascii=False) if len(audio_play_en)>0 else None
-    card.audio_attack_en = json.dumps(sorted(audio_attack_en), ensure_ascii=False) if len(audio_attack_en)>0 else None
-    card.audio_death_en = json.dumps(sorted(audio_death_en), ensure_ascii=False) if len(audio_death_en)>0 else None
-    card.audio_trigger_en = json.dumps(sorted(audio_trigger_en), ensure_ascii=False) if len(audio_trigger_en)>0 else None
-    card.audio_play_zh = json.dumps(sorted(audio_play_zh), ensure_ascii=False) if len(audio_play_zh)>0 else None
-    card.audio_attack_zh = json.dumps(sorted(audio_attack_zh), ensure_ascii=False) if len(audio_attack_zh)>0 else None
-    card.audio_death_zh = json.dumps(sorted(audio_death_zh), ensure_ascii=False) if len(audio_death_zh)>0 else None
-    card.audio_trigger_zh = json.dumps(sorted(audio_trigger_zh), ensure_ascii=False) if len(audio_trigger_zh)>0 else None
-    card.save()
-    print(card.hsId, card.name)
+    if len(audio_play_en) or len(audio_attack_en) or len(audio_death_en) or len(audio_trigger_en) or len(audio_play_zh) \
+            or len(audio_attack_zh) or len(audio_death_zh) or len(audio_trigger_zh):
+        card.audio_play_en = json.dumps(sorted(audio_play_en), ensure_ascii=False) if len(audio_play_en)>0 else None
+        card.audio_attack_en = json.dumps(sorted(audio_attack_en), ensure_ascii=False) if len(audio_attack_en)>0 else None
+        card.audio_death_en = json.dumps(sorted(audio_death_en), ensure_ascii=False) if len(audio_death_en)>0 else None
+        card.audio_trigger_en = json.dumps(sorted(audio_trigger_en), ensure_ascii=False) if len(audio_trigger_en)>0 else None
+        card.audio_play_zh = json.dumps(sorted(audio_play_zh), ensure_ascii=False) if len(audio_play_zh)>0 else None
+        card.audio_attack_zh = json.dumps(sorted(audio_attack_zh), ensure_ascii=False) if len(audio_attack_zh)>0 else None
+        card.audio_death_zh = json.dumps(sorted(audio_death_zh), ensure_ascii=False) if len(audio_death_zh)>0 else None
+        card.audio_trigger_zh = json.dumps(sorted(audio_trigger_zh), ensure_ascii=False) if len(audio_trigger_zh)>0 else None
+        card.save()
+        query = {
+            'where': json.dumps({
+                'hsId': {'$eq': card.hsId}
+            }),
+        }
+        res = ifanr.get_table_data(tableID=HSCardsTableId, query=query)
+        ifanrCard = res.get('objects')[0]
+        ifanrCard['audio_play_en'] = card.audio_play_en
+        ifanrCard['audio_attack_en'] = card.audio_attack_en
+        ifanrCard['audio_death_en'] = card.audio_death_en
+        ifanrCard['audio_trigger_en'] = card.audio_trigger_en
+        ifanrCard['audio_play_zh'] = card.audio_play_zh
+        ifanrCard['audio_attack_zh'] = card.audio_attack_zh
+        ifanrCard['audio_death_zh'] = card.audio_death_zh
+        ifanrCard['audio_trigger_zh'] = card.audio_trigger_zh
+        ifanr.put_table_data(tableID=HSCardsTableId, id=ifanrCard['id'], data=ifanrCard)
+        print(card.hsId, card.name)
+    else:
+        print(card.name+' 没有相应语音文件')

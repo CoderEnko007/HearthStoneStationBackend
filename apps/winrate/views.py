@@ -4,7 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import HSWinRate, DeckNameTranslate
-from .serializer import HSWinRateSerializer, DeckNameTranslateSerializer
+from .serializer import HSWinRateSerializer, HSWinRateVisSerializer, DeckNameTranslateSerializer
 from .filters import WinRateFilter
 
 # Create your views here.
@@ -18,11 +18,18 @@ class PostPagination(PageNumberPagination):
 class HSWinRateViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = HSWinRate.objects.all()
     pagination_class = PostPagination
-    serializer_class = HSWinRateSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     # filter_fields = ('faction', 'create_time')
     filter_class = WinRateFilter
     ordering_fields = ('create_time', )
+
+    def get_serializer_class(self):
+        if self.basename == 'winrate-vis':
+            return HSWinRateVisSerializer
+        elif self.basename == 'winrate':
+            return HSWinRateSerializer
+        else:
+            return HSWinRateVisSerializer
 
 
 class DeckNameTranslateViewSet(viewsets.ReadOnlyModelViewSet):

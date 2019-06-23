@@ -9,3 +9,8 @@ class ArchetypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Archetype
         fields = "__all__"
+
+class ArchetypeVisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Archetype
+        fields = "__all__"

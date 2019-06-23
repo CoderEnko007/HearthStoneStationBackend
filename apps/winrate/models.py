@@ -4,6 +4,12 @@ from utils.globalVar import globalVariable
 
 # Create your models here.
 class HSWinRate(models.Model):
+    RANGE = (
+        ('All', '全分段'),
+        ('Legend_Only', '传说分段'),
+        ('One_Through_Five', '5级-1级分段')
+    )
+    rank_range = models.CharField(max_length=200, default='All', choices=RANGE, verbose_name='排名分段')
     faction = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True, verbose_name='职业')
     archetype = models.CharField(max_length=100, null=True, blank=True, verbose_name='卡组模型')
     winrate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='胜率')
