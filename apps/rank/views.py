@@ -10,7 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 class RankingPagination(PageNumberPagination):
     page_size = 10
-    page_size_query_param = page_size
+    page_size_query_param = 'page_size'
     page_query_param = 'page'
     max_page_size = 3000
 

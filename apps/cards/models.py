@@ -10,7 +10,7 @@ class Series(models.Model):
     扩展包详情
     """
     cname = models.CharField(max_length=20, default='', verbose_name='扩展包（中文）')
-    ename = models.CharField(max_length=20, default='', verbose_name='扩展包（英文）')
+    ename = models.CharField(max_length=100, default='', verbose_name='扩展包（英文）')
     image = models.ImageField(max_length=200, null=True, blank=True, upload_to='series/', verbose_name='扩展包Logo')
     mode = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.MODE_TYPE, verbose_name='游戏模式', help_text='游戏模式')
     create_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
@@ -65,71 +65,6 @@ class Cards(models.Model):
     def __str__(self):
         return self.cname
 
-
-class HSCards(models.Model):
-    def image_img(self):
-        if self.hsId:
-            str = "<img src='https://art.hearthstonejson.com/v1/render/latest/zhCN/256x/{}.png'/>".format(self.hsId)
-            return mark_safe(str)
-        else:
-            return '(no image)'
-    image_img.short_description = '图片'
-
-    def image_thumb(self):
-        if self.hsId:
-            str = "<img src='https://art.hearthstonejson.com/v1/tiles/{}.jpg'/>".format(self.hsId)
-            return mark_safe(str)
-        else:
-            return '(no image)'
-
-    image_thumb.short_description = '缩略图'
-
-    hsId = models.CharField(max_length=20, null=True, blank=True, verbose_name='hsId')
-    dbfId = models.IntegerField(verbose_name='DBF IDs')
-    name = models.CharField(max_length=100, verbose_name='名称')
-    ename = models.CharField(max_length=100, null=True, blank=True, verbose_name='英文名')
-    entourage = models.TextField(null=True, blank=True, verbose_name='衍生卡')
-    cost = models.IntegerField(null=True, blank=True, verbose_name='费用')
-    attack = models.IntegerField(null=True, blank=True, verbose_name='攻击')
-    health = models.IntegerField(null=True, blank=True, verbose_name='血量')
-    cardClass = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True, verbose_name='职业')
-    race = models.CharField(max_length=20, null=True, blank=True, verbose_name='种族')
-    rarity = models.CharField(max_length=20, choices=globalVariable.RARITY_TYPE, verbose_name='稀有度')
-    set = models.ForeignKey(Series, related_name='HSCards', null=True, blank=True, verbose_name='扩展包系列', on_delete=models.SET_NULL)
-    type = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.CLAZZ_TYPE, verbose_name='卡牌类别')
-    mechanics = models.TextField(null=True, blank=True, verbose_name='卡牌机制')
-    flavor = models.TextField(null=True, blank=True, verbose_name='描述')
-    eflavor = models.TextField(null=True, blank=True, verbose_name='英文描述')
-    text = models.TextField(null=True, blank=True, verbose_name='效果')
-    artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
-    collectible = models.BooleanField(verbose_name='可收集')
-    invalid = models.BooleanField(default=False, verbose_name='无效卡')
-
-    audio_play_en = models.TextField(null=True, blank=True, verbose_name='入场音效（英）')
-    audio_attack_en = models.TextField(null=True, blank=True, verbose_name='攻击音效（英）')
-    audio_death_en = models.TextField(null=True, blank=True, verbose_name='阵亡音效（英）')
-    audio_trigger_en = models.TextField(null=True, blank=True, verbose_name='效果触发音效（英）')
-    audio_play_zh = models.TextField(null=True, blank=True, verbose_name='入场音效（中）')
-    audio_attack_zh = models.TextField(null=True, blank=True, verbose_name='攻击音效（中）')
-    audio_death_zh = models.TextField(null=True, blank=True, verbose_name='阵亡音效（中）')
-    audio_trigger_zh = models.TextField(null=True, blank=True, verbose_name='效果触发音效（中）')
-
-    img_tile_link = models.TextField(null=True, blank=True, verbose_name='tile图片地址')
-    img_card_link = models.TextField(null=True, blank=True, verbose_name='card图片地址')
-    create_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
-
-    def set_entourage(self, item):
-        self.entourage = json.dumps(item)
-
-    def get_entourage(self):
-        return json.loads(self.entourage)
-
-    class Meta:
-        verbose_name = '卡牌详情'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.name
 
 class ArenaCards(models.Model):
     ifanId = models.CharField(max_length=200, null=True, blank=True, verbose_name='ifanId')
@@ -197,6 +132,145 @@ class ArenaCards(models.Model):
 
     class Meta:
         verbose_name = '竞技场单卡数据'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+class HSCards(models.Model):
+    def image_img(self):
+        if self.hsId:
+            str = "<img src='https://art.hearthstonejson.com/v1/render/latest/zhCN/256x/{}.png'/>".format(self.hsId)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+    image_img.short_description = '图片'
+
+    def image_thumb(self):
+        if self.hsId:
+            str = "<img src='https://art.hearthstonejson.com/v1/tiles/{}.jpg'/>".format(self.hsId)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+
+    image_thumb.short_description = '缩略图'
+
+    hsId = models.CharField(max_length=20, null=True, blank=True, verbose_name='hsId')
+    dbfId = models.IntegerField(verbose_name='DBF IDs')
+    name = models.CharField(max_length=100, verbose_name='名称')
+    ename = models.CharField(max_length=100, null=True, blank=True, verbose_name='英文名')
+    entourage = models.TextField(null=True, blank=True, verbose_name='衍生卡')
+    cost = models.IntegerField(null=True, blank=True, verbose_name='费用')
+    attack = models.IntegerField(null=True, blank=True, verbose_name='攻击')
+    health = models.IntegerField(null=True, blank=True, verbose_name='血量')
+    cardClass = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True, verbose_name='职业')
+    classes = models.TextField(null=True, blank=True, verbose_name='多职业')
+    race = models.CharField(max_length=20, null=True, blank=True, verbose_name='种族')
+    rarity = models.CharField(max_length=20, choices=globalVariable.RARITY_TYPE, verbose_name='稀有度')
+    set = models.ForeignKey(Series, related_name='HSCards', null=True, blank=True, verbose_name='扩展包系列', on_delete=models.SET_NULL)
+    type = models.CharField(max_length=20, null=True, blank=True, choices=globalVariable.CLAZZ_TYPE, verbose_name='卡牌类别')
+    mechanics = models.TextField(null=True, blank=True, verbose_name='卡牌机制')
+    flavor = models.TextField(null=True, blank=True, verbose_name='描述')
+    eflavor = models.TextField(null=True, blank=True, verbose_name='英文描述')
+    text = models.TextField(null=True, blank=True, verbose_name='效果')
+    artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
+    collectible = models.BooleanField(verbose_name='可收集')
+    invalid = models.BooleanField(default=False, verbose_name='无效卡')
+
+    audio_play_en = models.TextField(null=True, blank=True, verbose_name='入场音效（英）')
+    audio_attack_en = models.TextField(null=True, blank=True, verbose_name='攻击音效（英）')
+    audio_death_en = models.TextField(null=True, blank=True, verbose_name='阵亡音效（英）')
+    audio_trigger_en = models.TextField(null=True, blank=True, verbose_name='效果触发音效（英）')
+    audio_play_zh = models.TextField(null=True, blank=True, verbose_name='入场音效（中）')
+    audio_attack_zh = models.TextField(null=True, blank=True, verbose_name='攻击音效（中）')
+    audio_death_zh = models.TextField(null=True, blank=True, verbose_name='阵亡音效（中）')
+    audio_trigger_zh = models.TextField(null=True, blank=True, verbose_name='效果触发音效（中）')
+
+    img_tile_link = models.TextField(null=True, blank=True, verbose_name='tile图片地址')
+    img_card_link = models.TextField(null=True, blank=True, verbose_name='card图片地址')
+    create_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+    update_time = models.DateTimeField(default=datetime.now, verbose_name='更新时间')
+
+    def set_entourage(self, item):
+        self.entourage = json.dumps(item)
+
+    def get_entourage(self):
+        return json.loads(self.entourage)
+
+    class Meta:
+        verbose_name = '卡牌详情'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+class HSBattleGroundCards(models.Model):
+    MINION_TYPE = (
+        ('14', '鱼人'),
+        ('15', '恶魔'),
+        ('17', '机械'),
+        ('20', '野兽'),
+        ('24', '龙'),
+        ('26', '全部'),
+        ('23', '海盗'),
+    )
+    def image_img(self):
+        if self.hsId:
+            str = "<img src='{}' style='width: 200px;'/>".format(self.image)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+    image_img.short_description = '图片'
+
+    def image_gold(self):
+        if self.hsId:
+            str = "<img src='{}' style='width: 200px;'/>".format(self.gold_image)
+            return mark_safe(str)
+        else:
+            return '(no image)'
+
+    image_gold.short_description = '金卡图片'
+
+    hsId = models.CharField(max_length=20, null=True, blank=True, verbose_name='hsId')
+    name = models.CharField(max_length=100, verbose_name='中文名称')
+    ename = models.CharField(max_length=100, null=True, blank=True, verbose_name='英文名称')
+    entourageID = models.TextField(null=True, blank=True, verbose_name='衍生卡')
+    upgradeID = models.IntegerField(null=True, blank=True, verbose_name='三连卡牌')
+    cost = models.IntegerField(null=True, blank=True, verbose_name='费用')
+    attack = models.IntegerField(null=True, blank=True, verbose_name='攻击力')
+    health = models.IntegerField(null=True, blank=True, verbose_name='血量')
+    tier = models.IntegerField(null=True, blank=True, verbose_name='等级')
+    outTier = models.CharField(max_length=20, null=True, blank=True, verbose_name='外部等级')
+    hero = models.BooleanField(verbose_name='是否为英雄卡')
+    minionType = models.CharField(max_length=20, null=True, blank=True, choices=MINION_TYPE, verbose_name='随从种类')
+    rarityID = models.IntegerField(null=True, blank=True, verbose_name='稀有度')
+    setID = models.IntegerField(null=True, blank=True, verbose_name='扩展包ID')
+    typeID = models.IntegerField(null=True, blank=True, verbose_name='类型ID')
+    parentID = models.IntegerField(null=True, blank=True, verbose_name='归属卡牌ID')
+    keywords = models.TextField(null=True, blank=True, verbose_name='关键词')
+    flavor = models.TextField(null=True, blank=True, verbose_name='背景')
+    text = models.TextField(null=True, blank=True, verbose_name='效果')
+    artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
+    collectible = models.BooleanField(verbose_name='可收集')
+    image = models.TextField(null=True, blank=True, verbose_name='图片地址')
+    gold_image = models.TextField(null=True, blank=True, verbose_name='金卡地址')
+
+    create_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+
+    def set_entourageID(self, item):
+        self.entourage = json.dumps(item)
+
+    def get_entourageID(self):
+        return json.loads(self.entourageID)
+
+    def set_keywords(self, item):
+        self.entourage = json.dumps(item)
+
+    def get_keywords(self):
+        return json.loads(self.keywords)
+
+    class Meta:
+        verbose_name = '酒馆战棋卡牌详情'
         verbose_name_plural = verbose_name
 
     def __str__(self):

@@ -9,6 +9,7 @@ class globalVariable(object):
         ('Shaman', '萨满'),
         ('Warlock', '术士'),
         ('Warrior', '战士'),
+        ('DemonHunter', '恶魔猎手'),
         ('Neutral', '中立')
     )
     ARENA_FACTION_TYPE = (
@@ -21,7 +22,8 @@ class globalVariable(object):
         ('ROGUE', '潜行者'),
         ('SHAMAN', '萨满'),
         ('WARLOCK', '术士'),
-        ('WARRIOR', '战士')
+        ('WARRIOR', '战士'),
+        ('DEMONHUNTER', '恶魔猎手'),
     )
     RARITY_TYPE = (
         ('FREE', '免费'),

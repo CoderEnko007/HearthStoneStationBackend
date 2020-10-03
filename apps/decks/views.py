@@ -10,7 +10,7 @@ from .filters import DecksFilter, TrendingFilter
 # Create your views here.
 class PostPagination(PageNumberPagination):
     page_size = 10
-    page_size_query_param = page_size
+    page_size_query_param = 'page_size'
     page_query_param = 'page'
     max_page_size = 10000
 

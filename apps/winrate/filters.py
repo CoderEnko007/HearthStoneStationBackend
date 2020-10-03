@@ -15,4 +15,4 @@ class WinRateFilter(filters.FilterSet):
 
     class Meta:
         model = HSWinRate
-        fields = ['rank_range', 'faction', 'create_time']
+        fields = ['rank_range', 'faction', 'archetype', 'create_time']

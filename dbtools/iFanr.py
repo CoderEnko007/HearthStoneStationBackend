@@ -14,7 +14,8 @@ tablesID = {
     'wild_decks': 55625,
     'arena_cards': 57106,
     'trending': 53120,
-    'hsCard': 66551,
+    'hsCard': 76131,
+    'bgsCard': 87402
 }
 
 class iFanr(object):

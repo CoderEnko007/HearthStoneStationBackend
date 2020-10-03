@@ -21,11 +21,12 @@ from rest_framework.routers import DefaultRouter
 
 import xadmin
 from HearthStoneStationBackend.settings import MEDIA_ROOT
-from cards.views import CardsViewSet, HSCardsViewSet, ArenaCardsViewSet
+from cards.views import CardsViewSet, HSCardsViewSet, ArenaCardsViewSet, BattleGroundCardViewSet
 from rank.views import HSRankingViewSet
 from winrate.views import HSWinRateViewSet, DeckNameTranslateViewSet
 from decks.views import DecksViewSet, TrendingViewSet
 from archetype.views import ArchetypeSet
+from battlegrounds.views import BattlegroundsSet
 from wechat.views import WeChat
 
 from werobot.contrib.django import make_view
@@ -40,10 +41,12 @@ router.register(r'winrate-vis', HSWinRateViewSet, base_name='winrate-vis')
 router.register(r'decks', DecksViewSet, base_name='decks')
 router.register(r'trending', TrendingViewSet, base_name='trending')
 router.register(r'cards', HSCardsViewSet, base_name='cards')
+router.register(r'battleground-cards', BattleGroundCardViewSet, base_name='battlegroundcards')
 router.register(r'arenaCards', ArenaCardsViewSet, base_name='arenaCards')
 router.register(r'archetype', ArchetypeSet, base_name='archetype')
 router.register(r'archetype-vis', ArchetypeSet, base_name='archetype-vis')
 router.register(r'deckname', DeckNameTranslateViewSet, base_name='deckname')
+router.register(r'battlegrounds', BattlegroundsSet, base_name='battlegrounds')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

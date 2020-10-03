@@ -3,6 +3,7 @@ import os
 import json
 import requests
 import copy
+from datetime import datetime
 from dbtools.iFanr import iFanr
 from django.db.models import Q
 
@@ -20,6 +21,18 @@ from cards.models import HSCards, Series
 
 def add_zh_info(data):
     for item in data:
+        # if not ((item.get('cardClass', '') == 'DEMONHUNTER')):
+        #     continue
+        # if item.get('collectible', False) == False:
+        #     continue
+        # if not item.get('set', '') == 'HERO_SKINS':
+        #     continue
+        if item.get('id') != 'ULD_236' and item.get('id') != 'SCH_610':
+            continue
+        # if not (item.get('cardClass') == 'DEMONHUNTER' or item.get('set') == 'BLACK_TEMPLE' or item.get('set') == 'DEMON_HUNTER_INITIATE'):
+        #     continue
+        # if not item.get('id') == 'EX1_614t':
+        #     continue
         filter_card = HSCards.objects.filter(hsId=item['id'])
         if filter_card:
             card = filter_card[0]
@@ -34,6 +47,14 @@ def add_zh_info(data):
         card.attack = item.get('attack')
         card.health = item.get('health')
         card.cardClass = item.get('cardClass', '').capitalize()
+        if card.cardClass == 'Demonhunter':
+            card.cardClass = 'DemonHunter'
+        multiClassGroup = []
+        if item.get('classes'):
+            for clazz in item.get('classes'):
+                formatClazz = clazz.capitalize() if clazz.lower() != 'demonhunter' else 'DemonHunter'
+                multiClassGroup.append(formatClazz)
+        card.classes = multiClassGroup
         card.rarity = item.get('rarity', '')
         card.type = item.get('type')
         card.race = item.get('race')
@@ -43,6 +64,7 @@ def add_zh_info(data):
         card.artist = item.get('artist')
         card.collectible = item.get('collectible', False)
         card.entourage = item.get('entourage')
+        card.update_time = datetime.now()
 
         set_ename = item.get('set')
         set = Series.objects.filter(ename=set_ename)
@@ -54,7 +76,19 @@ def add_zh_info(data):
 def add_en_info(data):
     # 补充英文信息
     for item in data:
-        # if item['set'] == 'DALARAN':
+        # if item.get('id') != 'LOOT_539' and item.get('id') != '	OG_211' and item.get('id') != 'LOOT_080' and item.get('id') != 'CFM_020' \
+        #         and item.get('id') != 'OG_134' and item.get('id') != 'DAL_433':
+        #     continue
+        # if not ((item.get('cardClass', '') == 'PRIEST') and (item.get('set', '') == 'CORE' or item.get('set', '') == 'EXPERT1')):
+        #     continue
+        # if item.get('collectible', False) == False:
+        #     continue
+        # if not item.get('id') == 'EX1_614t':
+        #     continue
+        if not item.get('set', '') == 'SCHOLOMANCE':
+            continue
+        # if not (item.get('cardClass') == 'DEMONHUNTER' or item.get('set') == 'BLACK_TEMPLE' or item.get('set') == 'DEMON_HUNTER_INITIATE'):
+        #     continue
         filterCard = HSCards.objects.filter(hsId=item['id'])
         print('hsId:', item['id'])
         if len(filterCard)>0:
@@ -96,13 +130,16 @@ def valid_fbi_card():
 
 def fill_entourage(data):
     for item in data:
-        filterCard = HSCards.objects.filter(Q(hsId__contains=item.hsId), Q(invalid=False), ~Q(hsId=item.hsId))
+        filterCard = HSCards.objects.filter(Q(hsId__contains=item.hsId), Q(invalid=False), ~Q(hsId=item.hsId), ~Q(type='ENCHANTMENT'))
         list = []
         for card in filterCard:
             list.append(card.hsId)
         if len(list)>0:
             print(item.name, list)
             item.entourage = json.dumps(list)
+            item.save()
+        else:
+            item.entourage = None
             item.save()
         # else:
         #     item.entourage = None
@@ -150,34 +187,57 @@ def fill_entourage_audio(data):
 
 def update_local_cards():
     # 录入卡牌信息
-    # f = open('cards.json', encoding='utf-8')
-    # data = json.load(f)
-    # add_zh_info(data)
+    f = open('cards.json', encoding='utf-8')
+    data = json.load(f)
+    add_zh_info(data)
 
     # 补充英文信息
     # f = open('cards_enUS.json', encoding='utf-8')
     # data = json.load(f)
     # add_en_info(data)
-
-    # 从fbigame中读取有效卡牌
-    # valid_fbi_card()
-
+    #
+    # # 从fbigame中读取有效卡牌
+    # # valid_fbi_card()
+    #
     # 补全衍生卡
-    # data = HSCards.objects.filter(Q(collectible=True), Q(invalid=False))
+    # data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(set__ename='SCHOLOMANCE'))
     # fill_entourage(data)
 
-    data = HSCards.objects.filter(Q(collectible=True), Q(entourage__isnull=False))
-    fill_entourage_audio(data)
-    pass
+    # data = HSCards.objects.filter(Q(collectible=True) & Q(entourage__isnull=False)
+    #                               & Q(set__ename='SCHOLOMANCE'))
+    # fill_entourage_audio(data)
 
+    # 衍生卡中的双引号改成单引号
+    # data = HSCards.objects.filter(Q(entourage__isnull=False) & Q(set__ename='SCHOLOMANCE'))
+    # for item in data:
+    #     item.entourage = item.entourage.replace('\"', '\'')
+    #     item.save()
 
 def update_ifanr_cards():
-    local_cards = HSCards.objects.filter(artist__isnull=False)
+    # local_cards = HSCards.objects.filter(artist__isnull=False)
+    # local_cards = HSCards.objects.filter(Q(name='攻城恶魔') | Q(name='野性赐福') | Q(name='正义') | Q(name='光明之翼') | Q(name='大检查官怀特迈恩')
+    #                                      | Q(name='贫瘠之地饲养员') | Q(name='军情七处渗透者') | Q(name='奥术吞噬者') | Q(name='圣光闪耀'))
+    # local_cards = HSCards.objects.filter(Q(name='大铡蟹') | Q(name='泽尔，暗影斗篷'))
+    local_cards = HSCards.objects.filter(set__ename='HERO_SKINS')
+    # local_cards = HSCards.objects.filter(name='发掘潜力')
+    # local_cards = HSCards.objects.filter(hsId='SCH_126')
+
+    # local_cards = HSCards.objects.filter(Q(hsId='DRG_089') | Q(hsId='BT_124') | Q(hsId='BT_429') | Q(hsId='BT_187') | Q(hsId='BT_430')
+    #                                      | Q(hsId='DRG_322') | Q(hsId='BT_128') | Q(hsId='DRG_610') | Q(hsId='DRG_610t2') | Q(hsId='DRG_610t3'))
+    # local_cards = HSCards.objects.filter(Q(cardClass='PRIEST') & (Q(set__ename='CORE') | Q(set__ename='EXPERT1')))
+    # local_cards = HSCards.objects.filter(cardClass='DEMONHUNTER')
     print(len(local_cards))
 
     for card in local_cards:
         card_dict = model_to_dict(card)
+        if card_dict.get('entourage', ''):
+            card_dict['entourage'] = eval(card_dict['entourage'])
+        if card_dict.get('classes', ''):
+            card_dict['multiClass'] = eval(card_dict['classes'])
         card_dict['set_id'] = card_dict['set']
+        card_dict['name'] = card_dict['name']
+        del card_dict['create_time']
+        del card_dict['update_time']
         query = {
             'where': json.dumps({
                 'dbfId': {'$eq': card_dict['dbfId']}
@@ -191,7 +251,22 @@ def update_ifanr_cards():
             res = ifanr.add_table_data(tableID=ifanr.tablesID['hsCard'], data=card_dict)
         print('update_ifanr_cards {0}: {1}'.format(card_dict['name'], res))
 
+def test():
+    query = {
+        'where': json.dumps({
+            'cardClass': {'$eq': 'Demonhunter'}
+        })
+    }
+    res = ifanr.get_table_data(tableID=76131, query=query)
+    if res['meta']['total_count'] > 0:
+        for item in res['meta']['objects']:
+            item['cardClass'] = 'DemonHunter'
+            res = ifanr.put_table_data(tableID=76131, id=item['id'], data=item)
+
+    print(res)
+
 if __name__ == '__main__':
     update_local_cards()
+    # 记住去掉“回归”下的代码
     # update_ifanr_cards()
-
+    # test()

@@ -4,17 +4,17 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Archetype
-from .serializer import ArchetypeSerializer, ArchetypeVisSerializer
+from .serializer import ArchetypeSerializer, ArchetypeVisSerializer, ModifyArchetypeSerializer
 from .filters import ArchetypeFilter
 
 # Create your views here.
 class PostPagination(PageNumberPagination):
     page_size = 5
-    page_size_query_param = page_size
+    page_size_query_param = 'page_size'
     page_query_param = 'page'
     max_page_size = 10000
 
-class ArchetypeSet(viewsets.ReadOnlyModelViewSet):
+class ArchetypeSet(viewsets.ModelViewSet):
     queryset = Archetype.objects.all()
     pagination_class = PostPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
@@ -24,9 +24,12 @@ class ArchetypeSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('game_count', 'update_time')
 
     def get_serializer_class(self):
-        if self.basename == 'archetype-vis':
-            return ArchetypeVisSerializer
-        elif self.basename == 'archetype':
-            return ArchetypeSerializer
+        if self.action == 'create':
+            return ModifyArchetypeSerializer
         else:
-            return ArchetypeVisSerializer
+            if self.basename == 'archetype-vis':
+                return ArchetypeVisSerializer
+            elif self.basename == 'archetype':
+                return ArchetypeSerializer
+            else:
+                return ArchetypeVisSerializer

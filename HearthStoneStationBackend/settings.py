@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rank.apps.RankConfig',
     'decks.apps.DecksConfig',
     'winrate.apps.WinrateConfig',
+    'battlegrounds.apps.BattlegroundsConfig',
     'archetype.apps.ArchetypeConfig',
     'crispy_forms',
     'xadmin',

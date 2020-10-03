@@ -2,7 +2,7 @@
 # import django_filters
 from django_filters import rest_framework as filters
 
-from .models import Cards, HSCards, ArenaCards
+from .models import Cards, HSCards, ArenaCards, HSBattleGroundCards
 
 
 class CardsFilter(filters.FilterSet):
@@ -29,3 +29,10 @@ class HSArenaCardsFilter(filters.FilterSet):
     class Meta:
         model = ArenaCards
         fields = ['name', 'cardClass', 'rarity', 'type', 'set', 'classification', 'min_cost', 'min_played', 'extra_data', 'update_time']
+
+class HSBattleCardsFilter(filters.FilterSet):
+    name = filters.CharFilter(field_name='name', lookup_expr='icontains', label='卡牌名称')
+
+    class Meta:
+        model = HSBattleGroundCards
+        fields = ['name', 'tier', 'hero', 'minionType']

@@ -1,18 +1,18 @@
 from django.shortcuts import render
 
-from .serializer import CardsSerializer, HSCardsSerializer, ArenaCardsSerializer
+from .serializer import CardsSerializer, HSCardsSerializer, ArenaCardsSerializer, HSBattleGroundCardsSerializer
 from rest_framework import viewsets, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Cards, HSCards, ArenaCards
-from .filters import CardsFilter, HSCardsFilter, HSArenaCardsFilter
+from .models import Cards, HSCards, ArenaCards, HSBattleGroundCards
+from .filters import CardsFilter, HSCardsFilter, HSArenaCardsFilter, HSBattleCardsFilter
 
 # Create your views here.
 class CardsPagination(PageNumberPagination):
     page_size = 30
-    page_size_query_param = page_size
+    page_size_query_param = 'page_size'
     page_query_param = 'page'
     max_page_size = 3000
 
@@ -77,3 +77,14 @@ class ArenaCardsViewSet(viewsets.ReadOnlyModelViewSet):
     # filter_fields = ('cname', 'series', 'mode', 'faction', 'rarity', 'mana')
     search_fields = ('cname', 'faction', 'clazz', 'race', 'rarity', 'rule', 'series', 'mode')
     ordering_fields = ('mana', 'times_played', 'deck_pop', 'update_time')
+
+class BattleGroundCardViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = HSBattleGroundCards.objects.all().order_by('tier')
+    serializer_class = HSBattleGroundCardsSerializer
+    pagination_class = CardsPagination
+
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = HSBattleCardsFilter
+    # filter_fields = ('cname', 'series', 'mode', 'faction', 'rarity', 'mana')
+    search_fields = ('name', 'tier', 'hero', 'minionType')
+    ordering_fields = ('attack', 'health', 'tier')

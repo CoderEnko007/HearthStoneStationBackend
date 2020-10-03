@@ -6,10 +6,16 @@ from datetime import datetime
 class Archetype(models.Model):
     RANGE = (
         ('All', '全分段'),
-        ('Legend_Only', '传说分段'),
-        ('One_Through_Five', '5级-1级分段')
+        ('Legend_Only', '传说分段（旧）'),
+        ('One_Through_Five', '5级-1级分段'),
+        ('Six_Through_Ten', '10级-6级分段'),
+        ('BRONZE_THROUGH_GOLD', '青铜-黄金'),
+        ('DIAMOND_THROUGH_LEGEND', '钻石-传说'),
+        ('DIAMOND_FOUR_THROUGH_DIAMOND_ONE', '钻4-钻1'),
+        ('LEGEND', '传说'),
+        ('TOP_1000_LEGEND', '传说Top1000')
     )
-    rank_range = models.CharField(max_length=200, default='All', choices=RANGE, verbose_name='排名分段')
+    rank_range = models.CharField(max_length=200, default='BRONZE_THROUGH_GOLD', choices=RANGE, verbose_name='排名分段')
     tier = models.CharField(max_length=20, null=True, blank=True, verbose_name='梯队')
     faction = models.CharField(max_length=20, choices=globalVariable.FACTION_TYPE, null=True, blank=True, verbose_name='职业')
     archetype_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='牌组名称')
@@ -27,7 +33,7 @@ class Archetype(models.Model):
     update_time = models.DateTimeField(default=datetime.now, verbose_name='更新时间')
 
     class Meta:
-        verbose_name = '卡组模板数据'
+        verbose_name = '梯队信息'
         verbose_name_plural = verbose_name
 
     def __str__(self):
