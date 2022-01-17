@@ -30,7 +30,7 @@ class Archetype(models.Model):
     core_cards =  models.TextField(default='', null=True, blank=True, verbose_name='核心卡牌')
     pop_cards = models.TextField(default='', null=True, blank=True, verbose_name='热门卡牌')
     matchup = models.TextField(default='', null=True, blank=True, verbose_name='对抗情况')
-    update_time = models.DateTimeField(default=datetime.now, verbose_name='更新时间')
+    update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 
     class Meta:
         verbose_name = '梯队信息'

@@ -14,7 +14,7 @@ class RankingPagination(PageNumberPagination):
     page_query_param = 'page'
     max_page_size = 3000
 
-class HSRankingViewSet(viewsets.ReadOnlyModelViewSet):
+class HSRankingViewSet(viewsets.ModelViewSet):
     queryset = HSRanking.objects.all()
     pagination_class = RankingPagination
     # serializer_class = HSRankingSerializer

@@ -40,9 +40,11 @@ class globalVariable(object):
     )
     MODE_TYPE = (
         ('All', '全部模式'),
+        ('Classic', '经典模式'),
         ('Standard', '标准模式'),
         ('Wild', '狂野模式'),
-        ('Arena', '竞技场')
+        ('Arena', '竞技场'),
+        ('Duels', '对决模式')
     )
 
 class globalFunc(object):

@@ -9,10 +9,11 @@ from urllib import parse
 from ast import literal_eval
 
 pwd = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pwd+"../")
+sys.path.append(pwd + "../")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "HearthStoneStationBackend.settings")
 
 import django
+
 django.setup()
 from django.forms.models import model_to_dict
 
@@ -22,12 +23,14 @@ from cards.models import HSBattleGroundCards, HSCards
 
 updatedCard = []
 
+
 def get_cards_list(url):
     res = requests.get(url, verify=False)
     return res.json()
 
-def gen_cards_list(data):
-    for item in data:
+
+def gen_cards_list(card_list, recursion=True):
+    for item in card_list:
         # if not item.get('minionTypeId', '') == 24:
         #     continue
         filter_card = HSBattleGroundCards.objects.filter(hsId=item['id'])
@@ -35,7 +38,7 @@ def gen_cards_list(data):
             card = filter_card[0]
         else:
             card = HSBattleGroundCards()
-        print('save start:', item.get('name'))
+        print('save start:', item.get('name'), item.get('id'))
         card.hsId = item.get('id')
         card.name = item.get('name')
         temp_card = HSCards.objects.filter(dbfId=item['id'])
@@ -77,28 +80,29 @@ def gen_cards_list(data):
             card.gold_image = item.get('imageGold')
 
         # 衍生卡和英雄技能卡
-        if len(card.entourageID):
+        if len(card.entourageID) and card.parentID is None and recursion:
             params = parse.urlencode({
                 'ids': ','.join([str(i) for i in card.entourageID]),
                 'tier': 'all',
-                'pageSize': 200,
+                'pageSize': 300,
                 'locale': 'zh_cn'
             })
-            url = 'http://hs.blizzard.cn/action/hs/cards/battleround?{}'.format(params)
+            url = 'http://hs.blizzard.cn/action/hs/cards/battlegrounds?{}'.format(params)
+            print('url:', url)
             res = requests.get(url, verify=False)
             format_data = res.json()
             if format_data['cardCount']:
-                gen_cards_list(format_data['cards'])
+                gen_cards_list(format_data['cards'], False)
 
         # 三连升级卡牌
         if card.upgradeID is not None:
             params = parse.urlencode({
                 'ids': card.upgradeID,
                 'tier': 'all',
-                'pageSize': 200,
+                'pageSize': 300,
                 'locale': 'zh_cn'
             })
-            url = 'http://hs.blizzard.cn/action/hs/cards/battleround?{}'.format(params)
+            url = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?{}'.format(params)
             res = requests.get(url, verify=False)
             format_data = res.json()
             if format_data['cardCount']:
@@ -107,6 +111,7 @@ def gen_cards_list(data):
         card.save()
         updatedCard.append(card.hsId)
         print('save end:', item.get('name'), updatedCard)
+
 
 def update_ifanr_cards():
     local_cards = HSBattleGroundCards.objects.filter(hsId__in=updatedCard)
@@ -133,13 +138,17 @@ def update_ifanr_cards():
         print('update_ifanr_cards {0}: {1}'.format(card_dict['name'], res))
     pass
 
+
 if __name__ == '__main__':
     # bgCardsUrl = 'http://hs.blizzard.cn/action/hs/cards/battleround?tier=all&type=minion%2Chero&collectible=0%2C1&pageSize=200&locale=zh_cn'
     # bgCardsUrl = 'http://hs.blizzard.cn/action/hs/cards/battleround?sort=tier&order=asc&type=minion&tier=all&viewMode=grid&collectible=0%2C1&pageSize=200&locale=zh_cn'
-    bgCardsUrl = 'http://hs.blizzard.cn/action/hs/cards/battleround?tier=all&type=minion%2Chero&collectible=0%2C1&pageSize=200&locale=zh_cn'
+    # bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battleround?tier=all&type=minion%2Chero&collectible=0%2C1&pageSize=300&locale=zh_cn'
+    bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?type=hero%2Cminion&tier=all&collectible=0%2C1&pageSize=300&locale=zh_cn'
     data = get_cards_list(bgCardsUrl)
-    # filteredData = list(filter(lambda x:x.get('id', '')==61910, data['cards']))
-    # gen_cards_list(filteredData)
-    gen_cards_list(data['cards'])
+    list_id = [76562]
+    filteredData = list(filter(lambda x: x.get('id', '') in list_id, data['cards']))
+    gen_cards_list(filteredData)
+    # gen_cards_list(data['cards'])
+    # updatedCard = list_id
     update_ifanr_cards()
     pass

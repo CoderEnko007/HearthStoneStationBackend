@@ -32,7 +32,8 @@ class HSWinRate(models.Model):
     core_cards = models.TextField(default='', null=True, blank=True, verbose_name='核心卡牌')
     pop_cards = models.TextField(default='', null=True, blank=True, verbose_name='热门卡牌')
     matchup = models.TextField(default='', null=True, blank=True, verbose_name='对抗情况')
-    create_time = models.DateTimeField(null=True, blank=True, default=datetime.now, verbose_name='日期')
+    create_time = models.DateTimeField(null=True, blank=True, default=datetime.now, verbose_name='添加日期')
+    update_time = models.DateTimeField(null=True, blank=True, default=datetime.now, verbose_name='修改日期')
 
     class Meta:
         verbose_name = '卡组模板数据'

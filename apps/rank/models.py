@@ -9,7 +9,7 @@ class HSRanking(models.Model):
     popularity = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='热度')
     win_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='胜率')
     total_games = models.IntegerField(null=True, blank=True, verbose_name='总对局数')
-    report_time = models.DateTimeField(null=True, blank=True, default=datetime.now, verbose_name='日期')
+    report_time = models.DateTimeField(default=datetime.now, verbose_name='日期')
 
     class Meta:
         verbose_name = 'HS职业胜率排名'

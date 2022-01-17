@@ -12,7 +12,7 @@ from .filters import CardsFilter, HSCardsFilter, HSArenaCardsFilter, HSBattleCar
 # Create your views here.
 class CardsPagination(PageNumberPagination):
     page_size = 30
-    page_size_query_param = 'page_size'
+    page_size_query_param = page_size
     page_query_param = 'page'
     max_page_size = 3000
 

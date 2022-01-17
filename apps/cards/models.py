@@ -176,6 +176,8 @@ class HSCards(models.Model):
     artist = models.CharField(max_length=200, null=True, blank=True, verbose_name='艺术家')
     collectible = models.BooleanField(verbose_name='可收集')
     invalid = models.BooleanField(default=False, verbose_name='无效卡')
+    howToEarn = models.TextField(null=True, blank=True, verbose_name='如何获取')
+    howToEarnGolden = models.TextField(null=True, blank=True, verbose_name='如何获取（金卡）')
 
     audio_play_en = models.TextField(null=True, blank=True, verbose_name='入场音效（英）')
     audio_attack_en = models.TextField(null=True, blank=True, verbose_name='攻击音效（英）')

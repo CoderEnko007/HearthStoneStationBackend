@@ -16,8 +16,8 @@ django.setup()
 
 from cards.models import HSCards
 
-us_path = 'SCH-enus'
-cn_path = 'SCH-zhcn'
+us_path = 'AV-enus'
+cn_path = 'AV-zhcn'
 
 audioPath = os.path.join(BASE_DIR, 'media')
 audioFileEn = glob.glob(audioPath+'/sound/{}/*.wav'.format(us_path))
@@ -33,10 +33,12 @@ audioFileZh = glob.glob(audioPath+'/sound/{}/*.wav'.format(cn_path))
 
 # queryset = HSCards.objects.filter(Q(set__ename='BLACK_TEMPLE') | Q(cardClass='DEMONHUNTER') | Q(set__ename='DEMON_HUNTER_INITIATE'))
 # queryset = HSCards.objects.filter(hsId='SCH_199')
-queryset = HSCards.objects.filter(Q(set__ename='SCHOLOMANCE'))
+queryset = HSCards.objects.filter(Q(set__ename='ALTERAC_VALLEY'))
 for card in queryset:
     # print(card.hsId)
     # if card.type == 'SPELL' or card.type == 'WEAPON': continue
+    # if 'DED_' not in card.hsId:
+    #     continue
     audio_play_en = []
     audio_attack_en = []
     audio_death_en = []
@@ -105,4 +107,5 @@ for card in queryset:
         # ifanr.put_table_data(tableID=HSCardsTableId, id=ifanrCard['id'], data=ifanrCard)
         # print(card.hsId, card.name)
     else:
-        print(card.name+' 没有相应语音文件')
+        # print(card.name+' 没有相应语音文件')
+        pass
