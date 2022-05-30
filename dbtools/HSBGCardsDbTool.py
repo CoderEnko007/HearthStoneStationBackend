@@ -50,7 +50,7 @@ def gen_cards_list(card_list, recursion=True):
                 card.ename = temp_card[0].ename
             else:
                 card.ename = ''
-        card.entourageID = item.get('childIds')
+        card.entourageID = list(item.get('childIds'))
         card.cost = item.get('manaCost')
         card.attack = item.get('attack')
         card.health = item.get('health')
@@ -69,6 +69,9 @@ def gen_cards_list(card_list, recursion=True):
         if battlegrounds is None:
             print('{}:battlegrounds is None'.format(item['name']))
             continue
+        card.companionId = battlegrounds.get('companionId') if battlegrounds else 0
+        # if card.companionId != 0 and card.companionId in card.entourageID:
+        #     card.entourageID.remove(card.companionId)
         card.tier = battlegrounds.get('tier') if battlegrounds else ''
         card.hero = battlegrounds.get('hero') if battlegrounds else 0
         card.image = battlegrounds.get('image') if battlegrounds else ''
@@ -93,6 +96,8 @@ def gen_cards_list(card_list, recursion=True):
             format_data = res.json()
             if format_data['cardCount']:
                 gen_cards_list(format_data['cards'], False)
+            if card.companionId != 0 and card.companionId in card.entourageID:
+                card.entourageID.remove(card.companionId)
 
         # 三连升级卡牌
         if card.upgradeID is not None:
@@ -120,6 +125,7 @@ def update_ifanr_cards():
         card_dict = model_to_dict(card)
         del card_dict['id']
         card_dict['hsId'] = int(card_dict['hsId'])
+        card_dict['companionId'] = int(card_dict['companionId'])
         card_dict['minionType'] = int(card_dict['minionType']) if card_dict['minionType'] else None
         card_dict['entourageID'] = literal_eval(card_dict['entourageID']) if card_dict['entourageID'] else None
         card_dict['keywords'] = literal_eval(card_dict['keywords']) if card_dict['keywords'] else None
@@ -145,8 +151,9 @@ if __name__ == '__main__':
     # bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battleround?tier=all&type=minion%2Chero&collectible=0%2C1&pageSize=300&locale=zh_cn'
     bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?type=hero%2Cminion&tier=all&collectible=0%2C1&pageSize=300&locale=zh_cn'
     data = get_cards_list(bgCardsUrl)
-    list_id = [76562]
+    list_id = [80739, 80747, 80749, 80743, 80741, 80751, 80753, 80756, 87084]
     filteredData = list(filter(lambda x: x.get('id', '') in list_id, data['cards']))
+    # filteredData = list(filter(lambda x: x.get('battlegrounds').get('hero') is True, data['cards']))
     gen_cards_list(filteredData)
     # gen_cards_list(data['cards'])
     # updatedCard = list_id

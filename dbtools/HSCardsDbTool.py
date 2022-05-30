@@ -19,8 +19,9 @@ ifanr = iFanr()
 
 from cards.models import HSCards, Series
 
-filter_id = ['BAR_539', 'SW_315', 'BAR_320', 'AV_255', 'SW_090', 'SW_003', 'CS3_008', 'AV_137', 'BT_733', 'AV_113',
-             'DED_515', 'AV_200', 'BAR_546']
+filter_id = ['AV_100', 'TSC_006', 'ONY_010', 'TSC_219', 'TSC_070', 'ONY_009', 'TSC_945', 'TSC_945', 'TSC_216',
+             'TSC_209', 'SW_012', 'TSC_215', 'ONY_032', 'ONY_030', 'AV_298', 'GIL_598', 'DAL_416', 'TSC_955',
+             'TSC_956', 'TSC_039', 'TSC_753']
 
 def add_zh_info(data):
     for item in data:
@@ -30,7 +31,7 @@ def add_zh_info(data):
         #     continue
         # if not item.get('set', '') == 'HERO_SKINS':
         #     continue
-        # if not item.get('set', '') == 'ALTERAC_VALLEY':
+        # if not item.get('set', '') == 1810 and not item.get('set', '') == 'CORE':
         #     continue
         if item.get('id') not in filter_id:
             continue
@@ -73,26 +74,29 @@ def add_zh_info(data):
         card.howToEarnGolden = item.get('howToEarnGolden')
         card.update_time = datetime.now()
 
-        set_ename = item.get('set')
-        set = Series.objects.filter(ename=set_ename)
-        if set:
-            card.set = set[0]
+        if item.get('set', '') == 1810:
+            set_ename = 'CORE'
+        else:
+            set_ename = item.get('set')
+        set_obj = Series.objects.filter(ename=set_ename)
+        if set_obj:
+            card.set = set_obj[0]
         card.save()
         print('save:', item.get('name'))
 
 def add_en_info(data):
     # 补充英文信息
     for item in data:
-        # if item.get('id') not in filter_id:
-        #     continue
+        if item.get('id') not in filter_id:
+            continue
         # if not ((item.get('cardClass', '') == 'PRIEST') and (item.get('set', '') == 'CORE' or item.get('set', '') == 'EXPERT1')):
         #     continue
         # if item.get('collectible', False) == False:
         #     continue
         # if not item.get('set', '') == 'HERO_SKINS':
         #     continue
-        if not item.get('set', '') == 'ALTERAC_VALLEY':
-            continue
+        # if not item.get('set', '') == 1810 and not item.get('set', '') == 'CORE':
+        #     continue
         # if not (item.get('cardClass') == 'DEMONHUNTER' or item.get('set') == 'BLACK_TEMPLE' or item.get('set') == 'DEMON_HUNTER_INITIATE'):
         #     continue
         # if not item.get('id') == 'BAR_080':
@@ -195,33 +199,33 @@ def fill_entourage_audio(data):
 
 def update_local_cards():
     # 录入卡牌信息
-    # f = open('cards.json', encoding='utf-8')
-    # data = json.load(f)
-    # add_zh_info(data)
+    f = open('cards.json', encoding='utf-8')
+    data = json.load(f)
+    add_zh_info(data)
 
     # 补充英文信息
-    # f = open('cards_enUS.json', encoding='utf-8')
-    # data = json.load(f)
-    # add_en_info(data)
+    f = open('cards_enUS.json', encoding='utf-8')
+    data = json.load(f)
+    add_en_info(data)
     #
     # # 从fbigame中读取有效卡牌
     # # valid_fbi_card()
     #
     # 补全衍生卡
-    data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(set__ename='ALTERAC_VALLEY'))
+    # data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(set__ename='CORE'))
     # data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(hsId='SCH_199'))
-    # data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(hsId__in=filter_id))
+    data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(hsId__in=filter_id))
     fill_entourage(data)
 
-    data = HSCards.objects.filter(Q(collectible=True) & Q(entourage__isnull=False)
-                                  & Q(set__ename='ALTERAC_VALLEY'))
-    fill_entourage_audio(data)
+    # data = HSCards.objects.filter(Q(collectible=True) & Q(entourage__isnull=False)
+    #                               & Q(set__ename='THE_SUNKEN_CITY'))
+    # fill_entourage_audio(data)
 
     # 衍生卡中的双引号改成单引号
-    data = HSCards.objects.filter(Q(entourage__isnull=False) & Q(set__ename='ALTERAC_VALLEY'))
-    for item in data:
-        item.entourage = item.entourage.replace('\"', '\'')
-        item.save()
+    # data = HSCards.objects.filter(Q(entourage__isnull=False) & Q(set__ename='CORE'))
+    # for item in data:
+    #     item.entourage = item.entourage.replace('\"', '\'')
+    #     item.save()
 
 def update_ifanr_cards():
     # local_cards = HSCards.objects.filter(artist__isnull=False)
@@ -229,10 +233,10 @@ def update_ifanr_cards():
     #                                      | Q(name='贫瘠之地饲养员') | Q(name='军情七处渗透者') | Q(name='奥术吞噬者') | Q(name='圣光闪耀'))
     # local_cards = HSCards.objects.filter(Q(name='大铡蟹') | Q(name='泽尔，暗影斗篷'))
     # local_cards = HSCards.objects.filter(set__ename='HERO_SKINS')
-    local_cards = HSCards.objects.filter(set__ename='ALTERAC_VALLEY')
+    # local_cards = HSCards.objects.filter(set__ename='CORE')
     # local_cards = HSCards.objects.filter(name='发掘潜力')
     # local_cards = HSCards.objects.filter(Q(hsId='YOP_015'))
-    # local_cards = HSCards.objects.filter(hsId__in=filter_id)
+    local_cards = HSCards.objects.filter(hsId__in=filter_id)
     # local_cards = HSCards.objects.filter(Q(cardClass='PRIEST') & (Q(set__ename='CORE') | Q(set__ename='EXPERT1')))
     # local_cards = HSCards.objects.filter(cardClass='DEMONHUNTER')
     print(len(local_cards))

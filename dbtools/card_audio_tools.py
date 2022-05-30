@@ -16,8 +16,8 @@ django.setup()
 
 from cards.models import HSCards
 
-us_path = 'AV-enus'
-cn_path = 'AV-zhcn'
+us_path = 'TSC-enus'
+cn_path = 'TSC-zhcn'
 
 audioPath = os.path.join(BASE_DIR, 'media')
 audioFileEn = glob.glob(audioPath+'/sound/{}/*.wav'.format(us_path))
@@ -33,7 +33,7 @@ audioFileZh = glob.glob(audioPath+'/sound/{}/*.wav'.format(cn_path))
 
 # queryset = HSCards.objects.filter(Q(set__ename='BLACK_TEMPLE') | Q(cardClass='DEMONHUNTER') | Q(set__ename='DEMON_HUNTER_INITIATE'))
 # queryset = HSCards.objects.filter(hsId='SCH_199')
-queryset = HSCards.objects.filter(Q(set__ename='ALTERAC_VALLEY'))
+queryset = HSCards.objects.filter(Q(set__ename='THE_SUNKEN_CITY'))
 for card in queryset:
     # print(card.hsId)
     # if card.type == 'SPELL' or card.type == 'WEAPON': continue

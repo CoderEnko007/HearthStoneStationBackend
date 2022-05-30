@@ -237,6 +237,7 @@ class HSBattleGroundCards(models.Model):
     name = models.CharField(max_length=100, verbose_name='中文名称')
     ename = models.CharField(max_length=100, null=True, blank=True, verbose_name='英文名称')
     entourageID = models.TextField(null=True, blank=True, verbose_name='衍生卡')
+    companionId = models.CharField(max_length=20, null=True, blank=True, verbose_name='同伴卡')
     upgradeID = models.IntegerField(null=True, blank=True, verbose_name='三连卡牌')
     cost = models.IntegerField(null=True, blank=True, verbose_name='费用')
     attack = models.IntegerField(null=True, blank=True, verbose_name='攻击力')
