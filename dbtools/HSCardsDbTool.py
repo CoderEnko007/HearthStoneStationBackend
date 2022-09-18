@@ -19,9 +19,8 @@ ifanr = iFanr()
 
 from cards.models import HSCards, Series
 
-filter_id = ['AV_100', 'TSC_006', 'ONY_010', 'TSC_219', 'TSC_070', 'ONY_009', 'TSC_945', 'TSC_945', 'TSC_216',
-             'TSC_209', 'SW_012', 'TSC_215', 'ONY_032', 'ONY_030', 'AV_298', 'GIL_598', 'DAL_416', 'TSC_955',
-             'TSC_956', 'TSC_039', 'TSC_753']
+filter_id = ['AV_205', 'DED_510', 'AV_200', 'REV_602', 'SW_322', 'REV_021', 'TSC_926', 'TSC_052',
+             'SW_315']
 
 def add_zh_info(data):
     for item in data:
@@ -29,7 +28,7 @@ def add_zh_info(data):
         #     continue
         # if item.get('collectible', False) == False:
         #     continue
-        # if not item.get('set', '') == 'HERO_SKINS':
+        # if not item.get('set', '') == 'REVENDRETH':
         #     continue
         # if not item.get('set', '') == 1810 and not item.get('set', '') == 'CORE':
         #     continue
@@ -93,7 +92,7 @@ def add_en_info(data):
         #     continue
         # if item.get('collectible', False) == False:
         #     continue
-        # if not item.get('set', '') == 'HERO_SKINS':
+        # if not item.get('set', '') == 'REVENDRETH':
         #     continue
         # if not item.get('set', '') == 1810 and not item.get('set', '') == 'CORE':
         #     continue
@@ -212,7 +211,7 @@ def update_local_cards():
     # # valid_fbi_card()
     #
     # 补全衍生卡
-    # data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(set__ename='CORE'))
+    # data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(set__ename='REVENDRETH'))
     # data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(hsId='SCH_199'))
     data = HSCards.objects.filter(Q(collectible=True) & Q(invalid=False) & Q(hsId__in=filter_id))
     fill_entourage(data)
@@ -222,7 +221,7 @@ def update_local_cards():
     # fill_entourage_audio(data)
 
     # 衍生卡中的双引号改成单引号
-    # data = HSCards.objects.filter(Q(entourage__isnull=False) & Q(set__ename='CORE'))
+    # data = HSCards.objects.filter(Q(entourage__isnull=False) & Q(set__ename='REVENDRETH'))
     # for item in data:
     #     item.entourage = item.entourage.replace('\"', '\'')
     #     item.save()
@@ -232,8 +231,8 @@ def update_ifanr_cards():
     # local_cards = HSCards.objects.filter(Q(name='攻城恶魔') | Q(name='野性赐福') | Q(name='正义') | Q(name='光明之翼') | Q(name='大检查官怀特迈恩')
     #                                      | Q(name='贫瘠之地饲养员') | Q(name='军情七处渗透者') | Q(name='奥术吞噬者') | Q(name='圣光闪耀'))
     # local_cards = HSCards.objects.filter(Q(name='大铡蟹') | Q(name='泽尔，暗影斗篷'))
-    # local_cards = HSCards.objects.filter(set__ename='HERO_SKINS')
-    # local_cards = HSCards.objects.filter(set__ename='CORE')
+    # local_cards = HSCards.objects.filter(set__ename='THE_SUNKEN_CITY')
+    # local_cards = HSCards.objects.filter(set__ename='REVENDRETH')
     # local_cards = HSCards.objects.filter(name='发掘潜力')
     # local_cards = HSCards.objects.filter(Q(hsId='YOP_015'))
     local_cards = HSCards.objects.filter(hsId__in=filter_id)

@@ -100,7 +100,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hearthstonestation',
         'USER': 'root',
-        # 'PASSWORD': '',
+        # 'PASSWORD': '666666',
         # 'HOST': '127.0.0.1',
         'PASSWORD': '666666',
         'HOST': '47.98.187.217',

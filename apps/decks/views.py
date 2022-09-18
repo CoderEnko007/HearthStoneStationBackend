@@ -150,6 +150,7 @@ def format_deck(data):
         format_mode = FormatType.FT_CLASSIC
 
     for card in card_list:
+        print(card['card_hsid'])
         filter_card = HSCards.objects.get(hsId=card['card_hsid'])
         # 为card_array字段添加单卡的dbfId，用于根据单卡检索卡组
         card_array.append(filter_card.dbfId)
@@ -159,7 +160,9 @@ def format_deck(data):
         count = card.get('count')
         hsCards.append((filter_card.dbfId, count))
         # 套牌组成数据统计
-        clazzCount[filter_card.type] += count
+        # 临时去除场地卡统计
+        if filter_card.type != 'LOCATION':
+            clazzCount[filter_card.type] += count
         rarityCount[filter_card.rarity] += count
         if filter_card.cost >= 7:
             statistic[7] += count

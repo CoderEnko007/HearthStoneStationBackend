@@ -148,11 +148,12 @@ def update_ifanr_cards():
 if __name__ == '__main__':
     # bgCardsUrl = 'http://hs.blizzard.cn/action/hs/cards/battleround?tier=all&type=minion%2Chero&collectible=0%2C1&pageSize=200&locale=zh_cn'
     # bgCardsUrl = 'http://hs.blizzard.cn/action/hs/cards/battleround?sort=tier&order=asc&type=minion&tier=all&viewMode=grid&collectible=0%2C1&pageSize=200&locale=zh_cn'
-    # bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battleround?tier=all&type=minion%2Chero&collectible=0%2C1&pageSize=300&locale=zh_cn'
-    bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?type=hero%2Cminion&tier=all&collectible=0%2C1&pageSize=300&locale=zh_cn'
+    bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?gameMode=battlegrounds&pageSize=300&sort=tier%3Aasc%2Cname%3Aasc&locale=zh_cn'
+    # bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?type=hero%2Cminion&tier=all&collectible=0%2C1&pageSize=300&locale=zh_cn'
     data = get_cards_list(bgCardsUrl)
-    list_id = [80739, 80747, 80749, 80743, 80741, 80751, 80753, 80756, 87084]
+    list_id = [92397, 93382, 95006, 80747, 64056, 61060]
     filteredData = list(filter(lambda x: x.get('id', '') in list_id, data['cards']))
+    # filteredData = list(filter(lambda x: x.get('cardTypeId') == 40, data['cards']))
     # filteredData = list(filter(lambda x: x.get('battlegrounds').get('hero') is True, data['cards']))
     gen_cards_list(filteredData)
     # gen_cards_list(data['cards'])

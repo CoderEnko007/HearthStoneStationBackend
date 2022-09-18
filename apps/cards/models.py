@@ -155,7 +155,7 @@ class HSCards(models.Model):
 
     image_thumb.short_description = '缩略图'
 
-    hsId = models.CharField(max_length=20, null=True, blank=True, verbose_name='hsId')
+    hsId = models.CharField(max_length=100, null=True, blank=True, verbose_name='hsId')
     dbfId = models.IntegerField(verbose_name='DBF IDs')
     name = models.CharField(max_length=100, verbose_name='名称')
     ename = models.CharField(max_length=100, null=True, blank=True, verbose_name='英文名')
