@@ -36,7 +36,7 @@ class SeriesAdmin(object):
 
 class HSBattleGroundCardsAdmin(object):
     list_display = ['hsId', 'name', 'tier', 'minionType', 'image_img', 'image_gold']
-    list_filter = ['hero', 'cost', 'health', 'tier', 'minionType', 'typeID', 'collectible', 'outTier']
+    list_filter = ['hero', 'cost', 'health', 'tier', 'minionType', 'cardType', 'collectible', 'outTier']
     search_fields = ['hsId', 'name']
     readonly_fields = ('image_img', 'image_gold')
     ordering = ('tier',)

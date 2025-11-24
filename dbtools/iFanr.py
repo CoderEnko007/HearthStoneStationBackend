@@ -12,7 +12,7 @@ tablesID = {
     'decks_decks': 53174,
     'standard_decks': 53174,
     'wild_decks': 55625,
-    'classic_decks': 117489,
+    'twist_decks': 117489,
     'arena_cards': 70488,
     'trending': 53120,
     'hsCard': 76131,

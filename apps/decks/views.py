@@ -34,7 +34,7 @@ def upload_to_ifanr(data):
     elif data['mode'] == 'Standard':
         tableID = ifanr.tablesID['standard_decks']
     else:
-        tableID = ifanr.tablesID['classic_decks']
+        tableID = ifanr.tablesID['twist_decks']
     query = {
         'where': json.dumps({
             'deck_id': {'$eq': data['deck_id']}
@@ -137,9 +137,11 @@ class TrendingViewSet(viewsets.ModelViewSet):
 def format_deck(data):
     card_list = data.get('card_list', [])
     hsCards = []
+    sideboards_list = data.get('sideboards', [])
+    sideboards = []
     card_array = []
     set_array = []
-    clazzCount = {'MINION': 0, 'SPELL': 0, 'WEAPON': 0, 'HERO': 0}  # 类别组成
+    clazzCount = {'MINION': 0, 'SPELL': 0, 'WEAPON': 0, 'HERO': 0, 'LOCATION': 0}  # 类别组成
     rarityCount = {'FREE': 0, 'COMMON': 0, 'RARE': 0, 'EPIC': 0, 'LEGENDARY': 0}  # 稀有统计
     statistic = [0] * 8  # 费用统计
 
@@ -159,10 +161,11 @@ def format_deck(data):
         # 用于生成卡组代码
         count = card.get('count')
         hsCards.append((filter_card.dbfId, count))
-        # 套牌组成数据统计
+        # 套牌组成数据统计，用于在后台中card_list（卡组套牌）字段中展示
         # 临时去除场地卡统计
-        if filter_card.type != 'LOCATION':
-            clazzCount[filter_card.type] += count
+        # if filter_card.type != 'LOCATION':
+        #     clazzCount[filter_card.type] += count
+        clazzCount[filter_card.type] += count
         rarityCount[filter_card.rarity] += count
         if filter_card.cost >= 7:
             statistic[7] += count
@@ -172,19 +175,42 @@ def format_deck(data):
         card.update({'rarity': filter_card.rarity})
         card.update({'cname': filter_card.name})
         if filter_card.img_tile_link:
-            tile = re.match('^.*\/(.*\.png)', filter_card.img_tile_link)
-            tile = tile.group(1) if tile is not None else ''
+            # tile = re.match('^.*\/(.*\.png)', filter_card.img_tile_link)
+            # tile = tile.group(1) if tile is not None else ''
+            tile = filter_card.img_tile_link
             card.update({'tile': tile})
         else:
             card.update({'tile': ''})
+
+    for card in sideboards_list:
+        print(card['card_hsid'])
+        filter_card = HSCards.objects.get(hsId=card['card_hsid'])
+        owner_card = HSCards.objects.get(hsId=card['card_owner'])
+        count = card.get('count')
+        sideboards.append((filter_card.dbfId, count, owner_card.dbfId))
+        sideboard_title = card.get('sideboard_title')
+        card.update({'dbfId': filter_card.dbfId})
+        card.update({'rarity': filter_card.rarity})
+        card.update({'cname': filter_card.name})
+        card.update({'owner_name': owner_card.name})
+        card.update({'sideboard_title': sideboard_title})
+        if filter_card.img_tile_link:
+            # tile = re.match('^.*\/(.*\.png)', filter_card.img_tile_link)
+            # tile = tile.group(1) if tile is not None else ''
+            tile = filter_card.img_tile_link
+            card.update({'tile': tile})
+        else:
+            card.update({'tile': ''})
+
     try:
-        hsDeck = HearthStoneDeck(hero=data['faction'], cards=hsCards, format=format_mode)
+        hsDeck = HearthStoneDeck(hero=data['faction'], cards=hsCards, sideboards=sideboards, format=format_mode)
         deck_code = hsDeck.genDeckString()
     except Exception as e:
         deck_code = ''
-        print('generate deck code error', e, data['deck_id'], card_list)
+        print('generate deck code error', e, data['deck_id'], card_list, sideboards_list)
     data['deck_code'] = deck_code
     data['card_list'] = json.dumps(data.get('card_list', '[]'), ensure_ascii=False)
+    data['sideboards'] = json.dumps(data.get('sideboards', '[]'), ensure_ascii=False)
     data['mulligan'] = json.dumps(data.get('mulligan', '[]'), ensure_ascii=False)
     data['clazzCount'] = json.dumps(clazzCount, ensure_ascii=False)
     data['rarityCount'] = json.dumps(rarityCount, ensure_ascii=False)

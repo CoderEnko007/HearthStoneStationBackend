@@ -10,6 +10,7 @@ class globalVariable(object):
         ('Warlock', '术士'),
         ('Warrior', '战士'),
         ('DemonHunter', '恶魔猎手'),
+        ('DeathKnight', '死亡骑士'),
         ('Neutral', '中立')
     )
     ARENA_FACTION_TYPE = (
@@ -24,6 +25,7 @@ class globalVariable(object):
         ('WARLOCK', '术士'),
         ('WARRIOR', '战士'),
         ('DEMONHUNTER', '恶魔猎手'),
+        ('DEATHKNIGHT', '死亡骑士'),
     )
     RARITY_TYPE = (
         ('FREE', '免费'),
@@ -37,6 +39,7 @@ class globalVariable(object):
         ('SPELL', '法术'),
         ('WEAPON', '武器'),
         ('HERO', '英雄牌'),
+        ('LOCATION', '地标'),
     )
     MODE_TYPE = (
         ('All', '全部模式'),
@@ -44,7 +47,8 @@ class globalVariable(object):
         ('Standard', '标准模式'),
         ('Wild', '狂野模式'),
         ('Arena', '竞技场'),
-        ('Duels', '对决模式')
+        ('Duels', '对决模式'),
+        ('Twist', '幻变模式')
     )
 
 class globalFunc(object):

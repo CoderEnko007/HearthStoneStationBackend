@@ -35,4 +35,4 @@ class HSBattleCardsFilter(filters.FilterSet):
 
     class Meta:
         model = HSBattleGroundCards
-        fields = ['name', 'tier', 'hero', 'minionType']
+        fields = ['name', 'tier', 'hero', 'minionType', 'cardType']

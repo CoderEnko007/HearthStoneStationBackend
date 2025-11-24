@@ -33,6 +33,11 @@ def gen_cards_list(card_list, recursion=True):
     for item in card_list:
         # if not item.get('minionTypeId', '') == 24:
         #     continue
+        if item.get('id') in updatedCard:
+            print('yf---------------------------------yf', item)
+            continue
+        updatedCard.append(item.get('id'))
+        print('save start first:', item.get('name'), updatedCard)
         filter_card = HSBattleGroundCards.objects.filter(hsId=item['id'])
         if filter_card:
             card = filter_card[0]
@@ -56,9 +61,9 @@ def gen_cards_list(card_list, recursion=True):
         card.health = item.get('health')
         card.outTier = item.get('tier')
         card.minionType = item.get('minionTypeId')
+        card.cardType = item.get('cardTypeId')
         card.rarityID = item.get('rarityID')
         card.setID = item.get('cardSetId')
-        card.typeID = item.get('cardTypeId')
         card.parentID = item.get('parentId')
         card.keywords = item.get('keywordIds')
         card.flavor = item.get('flavorText')
@@ -91,7 +96,7 @@ def gen_cards_list(card_list, recursion=True):
                 'locale': 'zh_cn'
             })
             url = 'http://hs.blizzard.cn/action/hs/cards/battlegrounds?{}'.format(params)
-            print('url:', url)
+            print('url1:', url)
             res = requests.get(url, verify=False)
             format_data = res.json()
             if format_data['cardCount']:
@@ -108,13 +113,14 @@ def gen_cards_list(card_list, recursion=True):
                 'locale': 'zh_cn'
             })
             url = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?{}'.format(params)
+            print('url2:', url)
             res = requests.get(url, verify=False)
             format_data = res.json()
             if format_data['cardCount']:
                 gen_cards_list(format_data['cards'])
 
         card.save()
-        updatedCard.append(card.hsId)
+        # updatedCard.append(card.hsId)
         print('save end:', item.get('name'), updatedCard)
 
 
@@ -125,8 +131,9 @@ def update_ifanr_cards():
         card_dict = model_to_dict(card)
         del card_dict['id']
         card_dict['hsId'] = int(card_dict['hsId'])
-        card_dict['companionId'] = int(card_dict['companionId'])
+        card_dict['companionId'] = int(card_dict['companionId']) if card_dict['companionId'] else None
         card_dict['minionType'] = int(card_dict['minionType']) if card_dict['minionType'] else None
+        card_dict['cardType'] = int(card_dict['cardType']) if card_dict['cardType'] else None
         card_dict['entourageID'] = literal_eval(card_dict['entourageID']) if card_dict['entourageID'] else None
         card_dict['keywords'] = literal_eval(card_dict['keywords']) if card_dict['keywords'] else None
         del card_dict['create_time']
@@ -151,12 +158,13 @@ if __name__ == '__main__':
     bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?gameMode=battlegrounds&pageSize=300&sort=tier%3Aasc%2Cname%3Aasc&locale=zh_cn'
     # bgCardsUrl = 'https://hs.blizzard.cn/action/hs/cards/battlegrounds?type=hero%2Cminion&tier=all&collectible=0%2C1&pageSize=300&locale=zh_cn'
     data = get_cards_list(bgCardsUrl)
-    list_id = [92397, 93382, 95006, 80747, 64056, 61060]
-    filteredData = list(filter(lambda x: x.get('id', '') in list_id, data['cards']))
+    # list_id = [96870, 97594, 97604, 97115, 97957, 92405, 92411, 97270, 97072, 97490]
+    # filteredData = list(filter(lambda x: x.get('id', '') in list_id, data['cards']))
     # filteredData = list(filter(lambda x: x.get('cardTypeId') == 40, data['cards']))
+    # filteredData = list(filter(lambda x: x.get('cardTypeId') == 5, data['cards']))
     # filteredData = list(filter(lambda x: x.get('battlegrounds').get('hero') is True, data['cards']))
-    gen_cards_list(filteredData)
-    # gen_cards_list(data['cards'])
+    # gen_cards_list(filteredData)
+    gen_cards_list(data['cards'])
     # updatedCard = list_id
     update_ifanr_cards()
     pass

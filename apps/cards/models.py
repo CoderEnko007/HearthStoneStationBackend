@@ -215,6 +215,15 @@ class HSBattleGroundCards(models.Model):
         ('24', '龙'),
         ('26', '全部'),
         ('23', '海盗'),
+        ('18', '元素'),
+        ('43', '野猪人'),
+        ('92', '娜迦')
+    )
+    CARD_TYPE = (
+        ('3', '英雄'),
+        ('4', '随从'),
+        ('5', '任务'),
+        ('40', '奖励'),
     )
     def image_img(self):
         if self.hsId:
@@ -246,9 +255,9 @@ class HSBattleGroundCards(models.Model):
     outTier = models.CharField(max_length=20, null=True, blank=True, verbose_name='外部等级')
     hero = models.BooleanField(verbose_name='是否为英雄卡')
     minionType = models.CharField(max_length=20, null=True, blank=True, choices=MINION_TYPE, verbose_name='随从种类')
+    cardType = models.CharField(max_length=20, null=True, blank=True, choices=CARD_TYPE, verbose_name='卡牌类型')
     rarityID = models.IntegerField(null=True, blank=True, verbose_name='稀有度')
     setID = models.IntegerField(null=True, blank=True, verbose_name='扩展包ID')
-    typeID = models.IntegerField(null=True, blank=True, verbose_name='类型ID')
     parentID = models.IntegerField(null=True, blank=True, verbose_name='归属卡牌ID')
     keywords = models.TextField(null=True, blank=True, verbose_name='关键词')
     flavor = models.TextField(null=True, blank=True, verbose_name='背景')

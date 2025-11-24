@@ -11,7 +11,7 @@ class Decks(models.Model):
     MODE_TYPE = (
         ('Standard', '标准模式'),
         ('Wild', '狂野模式'),
-        ('Classic', '经典模式')
+        ('Twist', '幻变模式')
     )
     deck_id = models.CharField(max_length=200, null=True, blank=True, verbose_name='卡组ID')  # 卡组id
     mode = models.CharField(default='Standard', max_length=20, null=True, blank=True, choices=MODE_TYPE, verbose_name='游戏模式')
@@ -26,6 +26,7 @@ class Decks(models.Model):
     last_30_days = models.NullBooleanField(null=True, blank=True, verbose_name='最近30天', help_text='是否为最近30天的数据')
 
     card_list = models.TextField(default='', null=True, blank=True, verbose_name='卡组套牌')
+    sideboards = models.TextField(default='', null=True, blank=True, verbose_name='额外组件')
     card_array = models.TextField(default='', null=True, blank=True, verbose_name='包含的单卡id')
     set_array = models.TextField(default='', null=True, blank=True, verbose_name='包含的扩展包')
     mulligan = models.TextField(default='', null=True, blank=True, verbose_name='调度建议')
@@ -61,6 +62,7 @@ class Trending(models.Model):
     background_img = models.CharField(max_length=200, null=True, blank=True, verbose_name='背景图')  # 背景图
 
     card_list = models.TextField(default='', null=True, blank=True, verbose_name='卡组套牌')
+    sideboards = models.TextField(default='', null=True, blank=True, verbose_name='额外组件')
     mulligan = models.TextField(default='', null=True, blank=True, verbose_name='调度建议')
     deck_code = models.TextField(default='', null=True, blank=True, verbose_name='卡组代码')
     clazzCount = models.TextField(default='', null=True, blank=True, verbose_name='类别组成')

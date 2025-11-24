@@ -80,8 +80,9 @@ def format_cards_list(cards_list):
             card.update({'rarity': res_card.rarity})
             card.update({'cname': res_card.name})
             if res_card.img_tile_link:
-                tile = re.match('^.*\/(.*\.png)', res_card.img_tile_link)
-                tile = tile.group(1) if tile is not None else ''
+                # tile = re.match('^.*\/(.*\.png)', res_card.img_tile_link)
+                # tile = tile.group(1) if tile is not None else ''
+                tile = res_card.img_tile_link
                 card.update({'tile': tile})
             else:
                 card.update({'tile': ''})

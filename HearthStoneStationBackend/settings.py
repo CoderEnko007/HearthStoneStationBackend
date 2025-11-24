@@ -100,10 +100,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hearthstonestation',
         'USER': 'root',
-        # 'PASSWORD': '666666',
-        # 'HOST': '127.0.0.1',
         'PASSWORD': '666666',
-        'HOST': '47.98.187.217',
+        'HOST': '127.0.0.1',
+        # 'PASSWORD': '666666',
+        # 'HOST': '47.98.187.217',
         # storage_engine: myisam(default) innodb
         # set to innodb for third login
         'OPTION': {
